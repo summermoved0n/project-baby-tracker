@@ -39,6 +39,7 @@ export default function RegistrationScreen() {
   const openGallery = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
+      console.log("mbe her?");
       Alert.alert("Permission denied", "We need access to your gallery");
       return;
     }
@@ -48,7 +49,7 @@ export default function RegistrationScreen() {
       allowsEditing: true,
       quality: 1,
     });
-
+    console.log("why dont open");
     if (!result.canceled) {
       const file = result.assets[0];
       setImageUri(file.uri);
