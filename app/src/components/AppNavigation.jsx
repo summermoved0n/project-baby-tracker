@@ -7,8 +7,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import RegistrationScreen from "../Screens/RegistrationScreen";
-// import LoginScreen from "../Screens/LoginScreen";
-// import PostsScreen from "../Screens/PostsScreen";
+import LoginScreen from "../Screens/LoginScreen";
+import PostsScreen from "../Screens/PostsScreen";
 
 const MainStack = createStackNavigator();
 
@@ -23,7 +23,7 @@ export default function AppNavigation() {
             headerShown: false,
           }}
         />
-        {/* <MainStack.Screen
+        <MainStack.Screen
           name={"Login"}
           component={LoginScreen}
           options={{ headerShown: false }}
@@ -50,7 +50,7 @@ export default function AppNavigation() {
               </TouchableOpacity>
             ),
           })}
-        /> */}
+        />
       </MainStack.Navigator>
     </NavigationContainer>
   );
