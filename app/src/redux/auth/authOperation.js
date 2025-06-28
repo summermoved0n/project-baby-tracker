@@ -21,8 +21,12 @@ export const register = createAsyncThunk(
       const { data } = await axios.post("/auth/signup", registerData);
       return data;
     } catch (error) {
-      // console.error(error);
-      return rejectWithValue(error.response.data);
+      // дістаємо повідомлення з error.response.data.message або даємо дефолт
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
     }
   }
 );

@@ -75,25 +75,30 @@ export default function RegistrationScreen() {
       password: passwordTrim,
     });
 
-    const result = await dispatch(register(registerData));
+    try {
+      const resultAction = await dispatch(register(registerData));
 
-    console.log("result status", result);
-    console.log("error selector", error);
-
-    if (!result.meta.rejectWithValue) {
-      Toast.show({
-        type: "error", // 'success' | 'error' | 'info'
-        text1: result.payload.message,
-      });
-      return;
+      if (register.fulfilled.match(resultAction)) {
+        const message = resultAction.payload?.message;
+        if (message === "Create success") {
+          Alert.alert("✅ Registration successful");
+          navigation.navigate("Login");
+        } else {
+          Alert.alert("Unexpected response", message || "No message returned");
+        }
+      } else if (register.rejected.match(resultAction)) {
+        Alert.alert("❌ Registration failed", resultAction.payload); // Тут вже точно рядок
+      }
+    } catch (err) {
+      Alert.alert("Unexpected error", err.message);
     }
 
-    Toast.show({
-      type: "success", // 'success' | 'error' | 'info'
-      text1: "Реєстрація успішна!",
-      text2: "Тепер ви можете увійти 🚀",
-    });
-    navigation.navigate("Login");
+    // Toast.show({
+    //   type: "success", // 'success' | 'error' | 'info'
+    //   text1: "Реєстрація успішна!",
+    //   text2: "Тепер ви можете увійти 🚀",
+    // });
+    // navigation.navigate("Login");
   };
 
   return (
