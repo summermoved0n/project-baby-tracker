@@ -1,5 +1,8 @@
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+
+import { logIn } from "../redux/auth/authOperation";
 
 import {
   StyleSheet,
@@ -16,6 +19,7 @@ import {
 } from "react-native";
 
 export default function LoginScreen() {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const [email, setEmail] = useState("");
@@ -27,7 +31,15 @@ export default function LoginScreen() {
   const [isSecurePassword, setIsSecurePassword] = useState(true);
 
   const onLogin = () => {
-    Alert.alert("Credentials", `${email}`);
+    const loginData = {
+      email,
+      password,
+    };
+
+    dispatch(logIn(loginData))
+
+    navigation.navigate("Posts");
+
   };
 
   return (

@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useSelector } from "react-redux";
 
+import { selectAuthUser } from "../redux/auth/authSelectors";
+
 import {
   StyleSheet,
   Text,
@@ -12,26 +14,20 @@ import {
 } from "react-native";
 
 export default function PostsScreen() {
-  // const username = useSelector(selectUsersName);
+  const { email, username } = useSelector(selectAuthUser);
   // const email = useSelector(selectUsersEmail);
   // const avatar = useSelector(selectUsersAvatar);
 
   return (
     <View style={styles.container}>
       <View style={styles.avatar_container}>
-        {/* {!avatar ? ( */}
         <View style={styles.avatar_empty}>
           <Text>A</Text>
         </View>
-        {/* ) : (
-          <ImageBackground
-            style={styles.avatar_image}
-            source={{ uri: avatar }}
-          ></ImageBackground>
-        )} */}
+
         <View style={styles.text_container}>
-          <Text style={styles.text_username}>username</Text>
-          <Text style={styles.text_email}>email</Text>
+          <Text style={styles.text_username}>{username}</Text>
+          <Text style={styles.text_email}>{email}</Text>
         </View>
       </View>
     </View>

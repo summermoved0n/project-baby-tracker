@@ -1,11 +1,14 @@
 import { useState } from "react";
-import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
-// import { useDispatch } from "react-redux";
-// import { createUserWithEmailAndPassword } from "firebase/auth";
-// import { setUserAvatar, setUserEmail, setUserName } from "../redux/rootReducer";
+import { useDispatch, useSelector } from "react-redux";
+import Toast from "react-native-toast-message";
 
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { register } from "../redux/auth/authOperation";
+import {
+  selectAuthError,
+  selectAuthLoading,
+} from "../redux/auth/authSelectors";
+
 import {
   StyleSheet,
   Text,
@@ -18,10 +21,14 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 
 export default function RegistrationScreen() {
-  // const dispatch = useDispatch();
+  const isLoading = useSelector(selectAuthLoading);
+  const error = useSelector(selectAuthError);
+
+  const dispatch = useDispatch();
   const navigation = useNavigation();
 
   const [username, setUsername] = useState("");
@@ -34,29 +41,7 @@ export default function RegistrationScreen() {
 
   const [isSecurePassword, setIsSecurePassword] = useState(true);
 
-  const [imageUri, setImageUri] = useState(null);
-
-  const openGallery = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      console.log("mbe her?");
-      Alert.alert("Permission denied", "We need access to your gallery");
-      return;
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaType.Images,
-      allowsEditing: true,
-      quality: 1,
-    });
-    console.log("why dont open");
-    if (!result.canceled) {
-      const file = result.assets[0];
-      setImageUri(file.uri);
-    }
-  };
-
-  const onRegistration = () => {
+  const onRegistration = async () => {
     const usernameTrim = username.trim();
     if (usernameTrim.length < 3 || usernameTrim.length > 20) {
       return Alert.alert(
@@ -78,13 +63,37 @@ export default function RegistrationScreen() {
       );
     }
 
-    // dispatch(
-    //   setUserName(usernameTrim),
-    //   setUserEmail(emailTrim),
-    //   setUserAvatar(imageUri)
-    // );
+    const registerData = {
+      username: usernameTrim,
+      email: emailTrim,
+      password: passwordTrim,
+    };
 
-    navigation.navigate("Posts");
+    console.log({
+      username: usernameTrim,
+      email: emailTrim,
+      password: passwordTrim,
+    });
+
+    const result = await dispatch(register(registerData));
+
+    console.log("result status", result);
+    console.log("error selector", error);
+
+    if (!result.meta.rejectWithValue) {
+      Toast.show({
+        type: "error", // 'success' | 'error' | 'info'
+        text1: result.payload.message,
+      });
+      return;
+    }
+
+    Toast.show({
+      type: "success", // 'success' | 'error' | 'info'
+      text1: "Реєстрація успішна!",
+      text2: "Тепер ви можете увійти 🚀",
+    });
+    navigation.navigate("Login");
   };
 
   return (
@@ -99,60 +108,7 @@ export default function RegistrationScreen() {
           source={require("../../assets/images/photo-BG.jpg")}
         >
           <View style={styles.registration_container}>
-            {!imageUri ? (
-              <View style={styles.registration_avatar}>
-                <TouchableOpacity
-                  onPress={openGallery}
-                  style={styles.registration_icon}
-                >
-                  <AntDesign name="pluscircleo" size={25} color="#FF6C00" />
-                </TouchableOpacity>
-              </View>
-            ) : (
-              <View
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: "50%",
-                  transform: [{ translateX: -60 }, { translateY: -60 }],
-                }}
-              >
-                <View
-                  style={{
-                    width: 120,
-                    height: 120,
-                    borderRadius: 16,
-                    overflow: "hidden",
-                  }}
-                >
-                  <ImageBackground
-                    source={{ uri: imageUri }}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      resizeMode: "cover",
-                    }}
-                  />
-                </View>
-
-                <TouchableOpacity
-                  onPress={() => setImageUri(null)}
-                  style={{
-                    position: "absolute",
-                    bottom: 14,
-                    right: -12.5,
-                    backgroundColor: "#fff",
-                    borderRadius: 15,
-                    zIndex: 10,
-                  }}
-                >
-                  <AntDesign name="closecircleo" size={25} color="#bdbdbd" />
-                </TouchableOpacity>
-              </View>
-            )}
-
             <Text style={styles.registration_header}>Registration</Text>
-
             <View style={styles.registration_form}>
               <TextInput
                 onFocus={() => {
@@ -208,14 +164,12 @@ export default function RegistrationScreen() {
                 </TouchableOpacity>
               </View>
             </View>
-
             <TouchableOpacity
               style={styles.registration_button}
               onPress={onRegistration}
             >
               <Text style={styles.registration_btn_text}>Sign Up</Text>
             </TouchableOpacity>
-
             <TouchableOpacity onPress={() => navigation.navigate("Login")}>
               <Text style={styles.registration_form_text}>
                 Do you have an account? Sign In
@@ -223,6 +177,24 @@ export default function RegistrationScreen() {
             </TouchableOpacity>
           </View>
         </ImageBackground>
+
+        {isLoading && (
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              position: "absolute",
+              backgroundColor: "rgba(255,255,255,0.8)",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              zIndex: 100,
+            }}
+          >
+            <ActivityIndicator size="large" color="#FF6C00" />
+          </View>
+        )}
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
