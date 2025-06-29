@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Toast from "react-native-toast-message";
 
 import { logIn } from "../redux/auth/authOperation";
+import { selectAuthLoading } from "../redux/auth/authSelectors";
 
 import {
   StyleSheet,
@@ -16,11 +18,13 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from "react-native";
 
 export default function LoginScreen() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
+  const isLoading = useSelector(selectAuthLoading);
 
   const [email, setEmail] = useState("");
   const [emailFocus, setEmailFocus] = useState(false);
@@ -30,16 +34,47 @@ export default function LoginScreen() {
 
   const [isSecurePassword, setIsSecurePassword] = useState(true);
 
-  const onLogin = () => {
+  const onLogin = async () => {
     const loginData = {
       email,
       password,
     };
 
-    dispatch(logIn(loginData))
+    try {
+      const resultAction = await dispatch(logIn(loginData));
 
-    navigation.navigate("Posts");
-
+      if (logIn.fulfilled.match(resultAction)) {
+        const message = resultAction.payload?.message;
+        if (message === "Email or password valid") {
+          Toast.show({
+            type: "error", // 'success' | 'error' | 'info'
+            text1: "Error",
+            text2: "Email or password valid",
+          });
+        } else {
+          Toast.show({
+            type: "success", // 'success' | 'error' | 'info'
+            text1: "Welcome to your account",
+          });
+          navigation.navigate("Posts");
+        }
+      } else if (logIn.rejected.match(resultAction)) {
+        console.log(resultAction.payload);
+        Toast.show({
+          type: "error", // 'success' | 'error' | 'info'
+          text1: resultAction.payload.message,
+          text2: "error",
+          // text2: "Тепер ви можете увійти 🚀",
+        });
+      }
+    } catch (err) {
+      Toast.show({
+        type: "error", // 'success' | 'error' | 'info'
+        text1: "Error",
+        text2: err.message,
+        // text2: "Тепер ви можете увійти 🚀",
+      });
+    }
   };
 
   return (
@@ -107,6 +142,24 @@ export default function LoginScreen() {
             </TouchableOpacity>
           </View>
         </ImageBackground>
+
+        {isLoading && (
+          <View
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              position: "absolute",
+              backgroundColor: "rgba(255,255,255,0.8)",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              zIndex: 100,
+            }}
+          >
+            <ActivityIndicator size="large" color="#FF6C00" />
+          </View>
+        )}
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );

@@ -5,7 +5,6 @@ import Toast from "react-native-toast-message";
 
 import { register } from "../redux/auth/authOperation";
 import {
-  selectAuthError,
   selectAuthLoading,
 } from "../redux/auth/authSelectors";
 
@@ -26,7 +25,6 @@ import {
 
 export default function RegistrationScreen() {
   const isLoading = useSelector(selectAuthLoading);
-  const error = useSelector(selectAuthError);
 
   const dispatch = useDispatch();
   const navigation = useNavigation();
@@ -81,24 +79,32 @@ export default function RegistrationScreen() {
       if (register.fulfilled.match(resultAction)) {
         const message = resultAction.payload?.message;
         if (message === "Create success") {
-          Alert.alert("✅ Registration successful");
+          Toast.show({
+            type: "success", // 'success' | 'error' | 'info'
+            text1: "Create success",
+            text2: "Now you can sign in your account",
+          });
           navigation.navigate("Login");
         } else {
-          Alert.alert("Unexpected response", message || "No message returned");
+          Toast.show({
+            type: "error", // 'success' | 'error' | 'info'
+            text1: "Something went wrong",
+          });
         }
       } else if (register.rejected.match(resultAction)) {
-        Alert.alert("❌ Registration failed", resultAction.payload); // Тут вже точно рядок
+        Toast.show({
+          type: "error", // 'success' | 'error' | 'info'
+          text1: resultAction.payload,
+          // text2: "Тепер ви можете увійти 🚀",
+        });
       }
     } catch (err) {
-      Alert.alert("Unexpected error", err.message);
+      Toast.show({
+        type: "error", // 'success' | 'error' | 'info'
+        text1: err.message,
+        // text2: "Тепер ви можете увійти 🚀",
+      });
     }
-
-    // Toast.show({
-    //   type: "success", // 'success' | 'error' | 'info'
-    //   text1: "Реєстрація успішна!",
-    //   text2: "Тепер ви можете увійти 🚀",
-    // });
-    // navigation.navigate("Login");
   };
 
   return (

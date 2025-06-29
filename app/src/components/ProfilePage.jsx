@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { selectAuthUser } from "../redux/auth/authSelectors";
+import { createTask } from "../redux/tasks/tasksOperation";
 
 import {
   StyleSheet,
@@ -11,12 +12,25 @@ import {
   ImageBackground,
   View,
   TextInput,
+  TouchableOpacity,
 } from "react-native";
 
 export default function PostsScreen() {
+  const dispatch = useDispatch();
   const { email, username } = useSelector(selectAuthUser);
-  // const email = useSelector(selectUsersEmail);
-  // const avatar = useSelector(selectUsersAvatar);
+
+  const [breastFeed, setBreastFeed] = useState(null);
+  console.log(typeof Number(breastFeed));
+
+  const sendData = async () => {
+    const data = {
+      breastFeedingTime: Number(breastFeed),
+    };
+
+    try {
+      await dispatch(createTask(data));
+    } catch (error) {}
+  };
 
   return (
     <View style={styles.container}>
@@ -30,6 +44,28 @@ export default function PostsScreen() {
           <Text style={styles.text_email}>{email}</Text>
         </View>
       </View>
+
+      <View>
+        <TextInput
+          style={{}}
+          placeholder="Breast Feeding"
+          placeholderTextColor="#bdbdbd"
+          keyboardType="number-pad"
+          value={breastFeed}
+          onChangeText={setBreastFeed}
+        />
+      </View>
+
+      <TouchableOpacity
+        style={{
+          backgroundColor: "#000",
+          height: 40,
+          width: 100,
+        }}
+        onPress={sendData}
+      >
+        <Text style={{ color: "#fff" }}>Send Data</Text>
+      </TouchableOpacity>
     </View>
   );
 }
