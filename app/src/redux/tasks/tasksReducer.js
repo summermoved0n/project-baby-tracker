@@ -12,6 +12,9 @@ const tasksSlice = createSlice({
     builder.addCase(createTask.fulfilled, (state, { payload }) => {
       console.log(payload);
     }),
+  // .addCase(getAllTasks.fulfilled, (state, { payload }) => {
+  //   console.log(payload);
+  // }),
 });
 
 export const tasksReducer = tasksSlice.reducer;
