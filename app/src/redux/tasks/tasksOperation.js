@@ -3,9 +3,9 @@ import axios from "axios";
 
 export const createTask = createAsyncThunk(
   "tasks/createTask",
-  async (registerData, { rejectWithValue }) => {
+  async (formData, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post("/tasks", registerData);
+      const { data } = await axios.post("/tasks", formData);
       return data;
     } catch (error) {
       const message =

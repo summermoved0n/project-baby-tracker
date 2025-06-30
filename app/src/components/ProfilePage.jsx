@@ -22,8 +22,17 @@ export default function PostsScreen() {
   const [breastFeed, setBreastFeed] = useState(null);
 
   const sendData = async () => {
+    const date = new Date();
+    // fullDate: date.toLocaleDateString(),
+    // fullTime: date.toLocaleTimeString(),
+
     const data = {
+      date: "",
+      time: "",
+      milkFormula: Number("123"),
       breastFeedingTime: Number(breastFeed),
+      poopSize: "",
+      isPee: true,
     };
 
     try {
