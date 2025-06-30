@@ -57,6 +57,7 @@ export const currentUser = createAsyncThunk(
   "auth/current",
   async (_, { rejectWithValue }) => {
     try {
+      console.log(axios.defaults.headers.common.Authorization);
       const storageToken = await AsyncStorage.getItem("token");
       if (!storageToken) return rejectWithValue();
 

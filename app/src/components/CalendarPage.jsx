@@ -1,9 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Calendar } from "react-native-calendars";
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
+import { getDayTasks } from "../redux/tasks/tasksOperation";
+
+const today = new Date();
 
 export default function CalendarPage() {
-  const [selectedDate, setSelectedDate] = useState("");
+  const dispatch = useDispatch();
+  const [selectedDate, setSelectedDate] = useState(
+    today.toISOString().split("T")[0]
+  );
+
+  useEffect(() => {
+    dispatch(getDayTasks(selectedDate));
+  }, []);
 
   return (
     <View
@@ -49,6 +60,7 @@ export default function CalendarPage() {
           }}
         />
       </View>
+      <ScrollView></ScrollView>
     </View>
   );
 }

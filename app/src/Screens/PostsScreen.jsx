@@ -1,5 +1,8 @@
 import { View, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
+import { useEffect } from "react";
 
 import Fontisto from "@expo/vector-icons/Fontisto";
 import Feather from "@expo/vector-icons/Feather";
@@ -8,6 +11,7 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import ProfilePage from "../components/ProfilePage";
 import UserPage from "../components/UserPage";
 import CalendarPage from "../components/CalendarPage";
+import { currentUser } from "../redux/auth/authOperation";
 
 function Profile() {
   return (
@@ -36,6 +40,18 @@ function Calendar() {
 const Tabs = createBottomTabNavigator();
 
 const Posts = () => {
+  // const navigation = useNavigation();
+  // const dispatch = useDispatch();
+  // const token = useSelector((state) => state.auth.token);
+
+  // useEffect(() => {
+  //   if (!token) {
+  //     navigation.navigate("Login");
+  //   }
+
+  //   dispatch(currentUser());
+  // }, [token]);
+
   return (
     <Tabs.Navigator
       screenOptions={({ route }) => ({
