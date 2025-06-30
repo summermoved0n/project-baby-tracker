@@ -8,6 +8,7 @@ export const createTask = createAsyncThunk(
       const { data } = await axios.post("/tasks", formData);
       return data;
     } catch (error) {
+      console.log(error);
       const message =
         error.response?.data?.message ||
         error.message ||

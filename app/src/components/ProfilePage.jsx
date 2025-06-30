@@ -52,9 +52,9 @@ export default function PostsScreen() {
 
     console.log(formData);
 
-    // try {
-    //   await dispatch(createTask(data));
-    // } catch (error) {}
+    try {
+      await dispatch(createTask(formData));
+    } catch (error) {}
     resetForm();
   };
 
@@ -172,6 +172,7 @@ export default function PostsScreen() {
           <TouchableOpacity
             onPress={() => {
               setActivePoop(!activePoop);
+              setPoopSize("big");
             }}
             style={[styles.button, activePoop && styles.active_button]}
           >
@@ -186,6 +187,7 @@ export default function PostsScreen() {
 
           <TouchableOpacity
             onPress={() => {
+              setActiveFart(!activeFart);
               setPoopSize("small");
             }}
             style={[styles.button_small, activeFart && styles.active_button]}
