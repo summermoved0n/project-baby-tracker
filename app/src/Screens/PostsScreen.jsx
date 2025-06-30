@@ -3,9 +3,11 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import Fontisto from "@expo/vector-icons/Fontisto";
 import Feather from "@expo/vector-icons/Feather";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 import ProfilePage from "../components/ProfilePage";
 import UserPage from "../components/UserPage";
+import CalendarPage from "../components/CalendarPage";
 
 function Profile() {
   return (
@@ -23,6 +25,14 @@ function User() {
   );
 }
 
+function Calendar() {
+  return (
+    <View style={styles.container}>
+      <CalendarPage />
+    </View>
+  );
+}
+
 const Tabs = createBottomTabNavigator();
 
 const Posts = () => {
@@ -30,41 +40,67 @@ const Posts = () => {
     <Tabs.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
-          let iconName;
-
           if (route.name === "User") {
-            iconName = focused ? "user" : "user";
-          } else if (route.name === "Profile") {
-            iconName = focused ? "plus-a" : "plus-a";
-          }
-
-          return (
-            <View
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: focused ? "#ff6c00" : "transparent",
-                width: 70,
-                height: 40,
-                borderRadius: 20,
-              }}
-            >
-              {route.name === "Profile" ? (
-                <Fontisto
-                  name={iconName}
-                  size={focused ? 13 : 24}
-                  color={focused ? "#fff" : "#bdbdbd"}
-                />
-              ) : (
+            return (
+              <View
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: focused ? "pink" : "transparent",
+                  width: 70,
+                  height: 40,
+                  borderRadius: 20,
+                }}
+              >
                 <Feather
-                  name={iconName}
+                  name="user"
                   size={focused ? 13 : 24}
                   color={focused ? "#fff" : "#bdbdbd"}
                 />
-              )}
-            </View>
-          );
+              </View>
+            );
+          } else if (route.name === "Profile") {
+            return (
+              <View
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: focused ? "pink" : "transparent",
+                  width: 70,
+                  height: 40,
+                  borderRadius: 20,
+                }}
+              >
+                <Fontisto
+                  name="plus-a"
+                  size={focused ? 13 : 24}
+                  color={focused ? "#fff" : "#bdbdbd"}
+                />
+              </View>
+            );
+          } else if (route.name === "Calendar") {
+            return (
+              <View
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  backgroundColor: focused ? "pink" : "transparent",
+                  width: 70,
+                  height: 40,
+                  borderRadius: 20,
+                }}
+              >
+                <FontAwesome
+                  name="calendar"
+                  size={focused ? 13 : 24}
+                  color={focused ? "#fff" : "#bdbdbd"}
+                />
+              </View>
+            );
+          }
         },
 
         tabBarActiveTintColor: "#fff",
@@ -77,6 +113,7 @@ const Posts = () => {
         tabBarShowLabel: false,
       })}
     >
+      <Tabs.Screen name="Calendar" component={Calendar} />
       <Tabs.Screen name="Profile" component={Profile} />
       <Tabs.Screen name="User" component={User} />
     </Tabs.Navigator>
