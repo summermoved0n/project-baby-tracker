@@ -20,7 +20,6 @@ export default function PostsScreen() {
   const { email, username } = useSelector(selectAuthUser);
 
   const [breastFeed, setBreastFeed] = useState(null);
-  console.log(typeof Number(breastFeed));
 
   const sendData = async () => {
     const data = {

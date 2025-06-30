@@ -9,13 +9,25 @@ import { createStackNavigator } from "@react-navigation/stack";
 import RegistrationScreen from "../Screens/RegistrationScreen";
 import LoginScreen from "../Screens/LoginScreen";
 import PostsScreen from "../Screens/PostsScreen";
+import { useDispatch, useSelector } from "react-redux";
+import { currentUser, logOut } from "../redux/auth/authOperation";
+import { useEffect } from "react";
 
 const MainStack = createStackNavigator();
 
 export default function AppNavigation() {
+  const dispatch = useDispatch();
+  const token = useSelector((state) => state.auth.token);
+
+  useEffect(() => {
+    if (token) {
+      dispatch(currentUser());
+    }
+  }, [token]);
+
   return (
     <NavigationContainer>
-      <MainStack.Navigator initialRouteName="Login">
+      <MainStack.Navigator initialRouteName={token ? "Posts" : "Login"}>
         <MainStack.Screen
           name={"Registration"}
           component={RegistrationScreen}
@@ -44,7 +56,10 @@ export default function AppNavigation() {
             headerRight: () => (
               <TouchableOpacity
                 style={{ marginRight: 16 }}
-                onPress={() => navigation.navigate("Registration")}
+                onPress={() => {
+                  dispatch(logOut());
+                  navigation.navigate("Login");
+                }}
               >
                 <Feather name="log-out" size={24} color="#bdbdbd" />
               </TouchableOpacity>

@@ -1,5 +1,5 @@
 import { createSlice, isAnyOf } from "@reduxjs/toolkit";
-import { register, logIn } from "./authOperation.js";
+import { register, logIn, currentUser, logOut } from "./authOperation.js";
 
 const initialState = {
   user: { username: null, email: null },
@@ -25,23 +25,23 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = null;
       })
-      // .addCase(logOut.fulfilled, (state, _) => {
-      //   state.user = { name: null, email: null };
-      //   state.token = null;
-      //   state.isLoggedIn = false;
-      //   state.isLoading = false;
-      // })
-      // .addCase(currentUser.fulfilled, (state, action) => {
-      //   state.user = action.payload;
-      //   state.isLoggedIn = true;
-      //   state.isLoading = false;
-      // })
+      .addCase(logOut.fulfilled, (state, _) => {
+        state.user = { username: null, email: null };
+        state.token = null;
+        state.isLoggedIn = false;
+        state.isLoading = false;
+      })
+      .addCase(currentUser.fulfilled, (state, { payload }) => {
+        state.user = payload;
+        state.isLoggedIn = true;
+        state.isLoading = false;
+      })
       .addMatcher(
         isAnyOf(
           register.pending,
-          logIn.pending
-          // logOut.pending,
-          // currentUser.pending
+          logIn.pending,
+          logOut.pending,
+          currentUser.pending
         ),
         (state) => {
           state.isLoading = true;
@@ -50,12 +50,11 @@ const authSlice = createSlice({
       .addMatcher(
         isAnyOf(
           register.rejected,
-          logIn.rejected
-          // logOut.rejected,
-          // currentUser.rejected
+          logIn.rejected,
+          logOut.rejected,
+          currentUser.rejected
         ),
         (state, { payload }) => {
-          console.log(payload);
           state.isLoading = false;
           state.error = payload;
         }

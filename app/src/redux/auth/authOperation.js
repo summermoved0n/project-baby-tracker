@@ -1,9 +1,9 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-// import toast from 'react-hot-toast';
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// axios.defaults.baseURL = "http://localhost:3031/api";
 axios.defaults.baseURL = "https://project-backend-d58n.onrender.com/api";
+// axios.defaults.baseURL = "http://localhost:3031/api";
 
 const token = {
   set(token) {
@@ -21,7 +21,6 @@ export const register = createAsyncThunk(
       const { data } = await axios.post("/auth/signup", registerData);
       return data;
     } catch (error) {
-      // дістаємо повідомлення з error.response.data.message або даємо дефолт
       const message =
         error.response?.data?.message ||
         error.message ||
@@ -39,38 +38,34 @@ export const logIn = createAsyncThunk(
       token.set(data.token);
       return data;
     } catch (error) {
-      // console.error(error);
       return rejectWithValue(error.response.data);
     }
   }
 );
 
-// export const logOut = createAsyncThunk('auth/logout', async () => {
-//   try {
-//     const { data } = await axios.post('/users/logout');
-//     token.unset();
-//     return data;
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
+export const logOut = createAsyncThunk("auth/logout", async () => {
+  try {
+    const { data } = await axios.post("/auth/signout");
+    token.unset();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+});
 
-// export const currentUser = createAsyncThunk(
-//   'auth/refresh',
-//   async (_, { getState, rejectWithValue }) => {
-//     const state = getState();
-//     const storageToken = state.auth.token;
+export const currentUser = createAsyncThunk(
+  "auth/current",
+  async (_, { rejectWithValue }) => {
+    try {
+      const storageToken = await AsyncStorage.getItem("token");
+      if (!storageToken) return rejectWithValue();
 
-//     if (storageToken === null) {
-//       return rejectWithValue();
-//     }
-
-//     token.set(storageToken);
-//     try {
-//       const { data } = await axios.get('/users/current');
-//       return data;
-//     } catch (error) {
-//       console.log(error);
-//     }
-//   }
-// );
+      token.set(storageToken);
+      const { data } = await axios.get("/auth/current");
+      return data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response?.data || "Помилка");
+    }
+  }
+);
