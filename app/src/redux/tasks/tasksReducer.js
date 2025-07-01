@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createTask, getDayTasks } from "./tasksOperation";
 
 const initialState = {
-  task: [],
+  dayTasks: [],
 };
 
 const tasksSlice = createSlice({
@@ -14,7 +14,8 @@ const tasksSlice = createSlice({
         console.log(payload);
       })
       .addCase(getDayTasks.fulfilled, (state, { payload }) => {
-        console.log(payload);
+        console.log("🎯 Отримано з бекенду:", JSON.stringify(payload, null, 2));
+        state.dayTasks = payload;
       }),
 });
 

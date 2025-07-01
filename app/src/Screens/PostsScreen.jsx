@@ -1,3 +1,5 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import { View, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useDispatch, useSelector } from "react-redux";
@@ -40,17 +42,22 @@ function Calendar() {
 const Tabs = createBottomTabNavigator();
 
 const Posts = () => {
-  // const navigation = useNavigation();
-  // const dispatch = useDispatch();
-  // const token = useSelector((state) => state.auth.token);
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   if (!token) {
-  //     navigation.navigate("Login");
-  //   }
+  useEffect(() => {
+    const checkToken = async () => {
+      const storageToken = await AsyncStorage.getItem("token");
 
-  //   dispatch(currentUser());
-  // }, [token]);
+      if (storageToken) {
+        dispatch(currentUser());
+      } else {
+        navigation.navigate("Login");
+      }
+    };
+
+    checkToken();
+  }, []);
 
   return (
     <Tabs.Navigator

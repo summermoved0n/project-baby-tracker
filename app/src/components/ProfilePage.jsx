@@ -39,7 +39,7 @@ export default function PostsScreen() {
     const day = String(date.getDate()).padStart(2, "0");
 
     const customDate = `${year}-${month}-${day}`;
-    const customTime = `${date.getHours()}:${date.getMinutes()}`;
+    const customTime = `0${date.getHours()}:0${date.getMinutes()}`;
 
     const formData = {
       date: customDate,
@@ -53,8 +53,10 @@ export default function PostsScreen() {
     console.log(formData);
 
     try {
-      await dispatch(createTask(formData));
-    } catch (error) {}
+      dispatch(createTask(formData));
+    } catch (error) {
+      console.log(error);
+    }
     resetForm();
   };
 

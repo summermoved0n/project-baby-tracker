@@ -3,18 +3,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { Calendar } from "react-native-calendars";
 import { ScrollView, Text, View } from "react-native";
 import { getDayTasks } from "../redux/tasks/tasksOperation";
+import { selectDayTasks } from "../redux/tasks/tasks.Selectors";
 
 const today = new Date();
 
 export default function CalendarPage() {
   const dispatch = useDispatch();
+  const dayTasks = useSelector(selectDayTasks);
   const [selectedDate, setSelectedDate] = useState(
     today.toISOString().split("T")[0]
   );
 
   useEffect(() => {
+    console.log(selectedDate);
     dispatch(getDayTasks(selectedDate));
-  }, []);
+
+    return () => {
+      console.log("unmount component");
+    };
+  }, [selectedDate]);
 
   return (
     <View
@@ -36,7 +43,7 @@ export default function CalendarPage() {
       >
         <Calendar
           onDayPress={(day) => {
-            console.log("selected day", day);
+            // console.log("selected day", day);
             setSelectedDate(day.dateString);
           }}
           markedDates={{
@@ -60,7 +67,35 @@ export default function CalendarPage() {
           }}
         />
       </View>
-      <ScrollView></ScrollView>
+      <ScrollView>
+        <Text>Tasks</Text>
+        {dayTasks?.length === 0 && <Text>Any notices at this day.</Text>}
+
+        {dayTasks?.map(({ _id, babyService }) => (
+          <View key={_id}>
+            {babyService?.map(
+              ({
+                _id,
+                time,
+                milkFormula,
+                breastFeedingTime,
+                poopSize,
+                isPee,
+              }) => (
+                <View key={_id}>
+                  <Text>{time}</Text>
+                  {milkFormula && <Text>- Milk formula: {milkFormula} ml</Text>}
+                  {breastFeedingTime && (
+                    <Text>- Breast Feed: {breastFeedingTime} min</Text>
+                  )}
+                  {poopSize && <Text>- Had a {poopSize} poop</Text>}
+                  {isPee && <Text>- Had a pee</Text>}
+                </View>
+              )
+            )}
+          </View>
+        ))}
+      </ScrollView>
     </View>
   );
 }

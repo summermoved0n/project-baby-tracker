@@ -3,9 +3,12 @@ import axios from "axios";
 
 export const createTask = createAsyncThunk(
   "tasks/createTask",
-  async (formData, { rejectWithValue }) => {
+  async (formData, { rejectWithValue, dispatch }) => {
     try {
       const { data } = await axios.post("/tasks", formData);
+
+      dispatch(getDayTasks(formData.date));
+
       return data;
     } catch (error) {
       console.log(error);
