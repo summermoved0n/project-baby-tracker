@@ -10,15 +10,15 @@ import Fontisto from "@expo/vector-icons/Fontisto";
 import Feather from "@expo/vector-icons/Feather";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
-import ProfilePage from "../components/ProfilePage";
+import CreateTaskPage from "../components/CreateTaskPage";
 import UserPage from "../components/UserPage";
 import CalendarPage from "../components/CalendarPage";
 import { currentUser } from "../redux/auth/authOperation";
 
-function Profile() {
+function CreateTask() {
   return (
     <View style={styles.container}>
-      <ProfilePage />
+      <CreateTaskPage />
     </View>
   );
 }
@@ -83,7 +83,7 @@ const Tasks = () => {
                 />
               </View>
             );
-          } else if (route.name === "Profile") {
+          } else if (route.name === "CreateTask") {
             return (
               <View
                 style={{
@@ -137,7 +137,7 @@ const Tasks = () => {
       })}
     >
       <Tabs.Screen name="Calendar" component={Calendar} />
-      <Tabs.Screen name="Profile" component={Profile} />
+      <Tabs.Screen name="CreateTask" component={CreateTask} />
       <Tabs.Screen name="User" component={User} />
     </Tabs.Navigator>
   );

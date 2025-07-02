@@ -54,7 +54,6 @@ export default function CalendarPage() {
         />
       </View>
       <ScrollView style={styles.scroll_conteiner}>
-        <Text style={styles.scroll_header}>Tasks:</Text>
         {(!dayTasks || dayTasks.length === 0) && (
           <Text>Any notices at this day.</Text>
         )}

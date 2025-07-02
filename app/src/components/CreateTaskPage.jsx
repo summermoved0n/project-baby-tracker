@@ -1,29 +1,25 @@
 import { useState } from "react";
 import Toast from "react-native-toast-message";
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import {
   createYearPattern,
   createTimePattern,
   hasTwoMoreKeys,
 } from "../helpers/middleware";
-import { selectAuthUser } from "../redux/auth/authSelectors";
 import { createTask } from "../redux/tasks/tasksOperation";
 
 import {
   StyleSheet,
   Text,
-  Alert,
-  ImageBackground,
   View,
   TextInput,
   TouchableOpacity,
+  ScrollView,
 } from "react-native";
 
-export default function TasksScreen() {
+export default function CreateTaskPage() {
   const dispatch = useDispatch();
-  // const { email, username } = useSelector(selectAuthUser);
 
   const [breastFeedingTime, setBreastFeedingTime] = useState(null);
   const [milkFormula, setMilkFormula] = useState(null);
@@ -93,23 +89,23 @@ export default function TasksScreen() {
 
   return (
     <View style={styles.container}>
-      <View
-        style={{ display: "flex", gap: 16, marginTop: 16, marginBottom: 16 }}
-      >
-        <View>
-          <Text>Milk Formula</Text>
+      <ScrollView style={styles.scroll_container}>
+        <Text style={styles.food_header}>Types of food</Text>
+        <View style={styles.milk_container}>
+          <Text style={styles.input_text}>Milk Formula</Text>
           <TextInput
-            style={styles.input}
-            placeholder="Milk Formula"
+            style={[styles.input, styles.milk_input]}
+            placeholder="ml"
             placeholderTextColor="#bdbdbd"
             keyboardType="number-pad"
             value={milkFormula}
             onChangeText={setMilkFormula}
+            editable={false}
           />
         </View>
 
         <View>
-          <Text>Breast Feeding</Text>
+          <Text style={styles.input_text}>Breast Feeding</Text>
           <TextInput
             style={styles.input}
             placeholder="Breast Feeding"
@@ -213,7 +209,7 @@ export default function TasksScreen() {
             <Text style={{ fontSize: 20 }}>Vitamin D</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
 
       <TouchableOpacity
         style={{
@@ -235,52 +231,42 @@ export default function TasksScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 32,
+    paddingTop: 16,
     paddingHorizontal: 16,
     width: "100%",
     height: "100%",
     backgroundColor: "pink",
   },
-  avatar_container: {
+  scroll_container: {
+    display: "flex",
+    gap: 16,
+    marginBottom: 16,
+  },
+  milk_container: {
     display: "flex",
     flexDirection: "row",
-    gap: 8,
-  },
-  avatar_empty: {
-    display: "flex",
-    justifyContent: "center",
     alignItems: "center",
-    width: 60,
-    height: 60,
-    borderRadius: 16,
-    backgroundColor: "#f6f6f6",
+    gap: 20,
   },
-  avatar_image: {
-    width: 60,
-    height: 60,
-    borderRadius: 16,
-    overflow: "hidden",
+  food_header: {
+    fontWeight: "600",
+    fontSize: 20,
+    textAlign: "center",
+    marginBottom: 8,
   },
-  text_container: {
-    display: "flex",
-    justifyContent: "center",
-  },
-  text_username: {
-    fontWeight: "700",
-    fontSize: 13,
-    color: "#212121",
-  },
-  text_email: {
-    fontWeight: "400",
-    fontSize: 11,
-    color: "rgba(33, 33, 33, 0.8)",
+  input_text: {
+    fontWeight: "500",
+    fontSize: 18,
+    color: "gray",
   },
   input: {
     backgroundColor: "#fff",
     paddingHorizontal: 16,
     borderRadius: 16,
-    // borderColor:
   },
+  // milk_input: {
+  //   width: 80,
+  // },
   button: {
     display: "flex",
     justifyContent: "center",

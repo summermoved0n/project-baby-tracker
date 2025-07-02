@@ -36,7 +36,7 @@ export default function CalendarItem({ babyService }) {
       </View>
       <View style={styles.bottom_conteiner}>
         {milkFormula && (
-          <Text style={styles.item}>
+          <Text style={[styles.item, styles.formula]}>
             <MaterialCommunityIcons
               name="baby-bottle-outline"
               size={14}
@@ -46,13 +46,13 @@ export default function CalendarItem({ babyService }) {
           </Text>
         )}
         {breastFeedingTime && (
-          <Text style={styles.item}>
+          <Text style={[styles.item, styles.milk]}>
             <Entypo name="water" size={14} color="black" /> Feed:
             {breastFeedingTime}min
           </Text>
         )}
         {isPoop && (
-          <Text style={styles.item}>
+          <Text style={[styles.item, styles.poop]}>
             <MaterialCommunityIcons
               name="emoticon-poop"
               size={18}
@@ -62,12 +62,12 @@ export default function CalendarItem({ babyService }) {
           </Text>
         )}
         {isPee && (
-          <Text style={styles.item}>
+          <Text style={[styles.item, styles.pee]}>
             <Ionicons name="water-outline" size={14} color="black" /> Pee
           </Text>
         )}
         {vitaminD && (
-          <Text style={styles.item}>
+          <Text style={[styles.item, styles.vitamin]}>
             <FontAwesome6
               name="prescription-bottle-medical"
               size={14}
@@ -121,5 +121,20 @@ const styles = StyleSheet.create({
     paddingTop: 2,
     paddingBottom: 2,
     paddingHorizontal: 4,
+  },
+  vitamin: {
+    backgroundColor: "#59e37a",
+  },
+  poop: {
+    backgroundColor: "#a89423",
+  },
+  pee: {
+    backgroundColor: "#ffc100",
+  },
+  formula: {
+    backgroundColor: "#00fbff",
+  },
+  milk: {
+    backgroundColor: "#ceeced",
   },
 });
