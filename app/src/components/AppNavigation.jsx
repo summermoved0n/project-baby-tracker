@@ -8,7 +8,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import RegistrationScreen from "../Screens/RegistrationScreen";
 import LoginScreen from "../Screens/LoginScreen";
-import PostsScreen from "../Screens/PostsScreen";
+import TasksScreen from "../Screens/TasksScreen";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUser, logOut } from "../redux/auth/authOperation";
 import { useEffect } from "react";
@@ -27,7 +27,7 @@ export default function AppNavigation() {
 
   return (
     <NavigationContainer>
-      <MainStack.Navigator initialRouteName={token ? "Posts" : "Login"}>
+      <MainStack.Navigator initialRouteName={token ? "Tasks" : "Login"}>
         <MainStack.Screen
           name={"Registration"}
           component={RegistrationScreen}
@@ -41,8 +41,8 @@ export default function AppNavigation() {
           options={{ headerShown: false }}
         />
         <MainStack.Screen
-          name={"Posts"}
-          component={PostsScreen}
+          name={"Tasks"}
+          component={TasksScreen}
           options={({ navigation }) => ({
             headerStyle: { borderBottomColor: "#bdbdbd", borderBottomWidth: 1 },
             headerShadowVisible: false,

@@ -11,7 +11,7 @@ const tasksSlice = createSlice({
   extraReducers: (builder) =>
     builder
       .addCase(createTask.fulfilled, (state, { payload }) => {
-        console.log(payload);
+        // console.log(payload);
       })
       .addCase(getDayTasks.fulfilled, (state, { payload }) => {
         console.log("🎯 Отримано з бекенду:", JSON.stringify(payload, null, 2));

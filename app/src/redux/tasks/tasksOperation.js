@@ -26,6 +26,7 @@ export const getDayTasks = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const { data } = await axios.get(`/tasks?date=${formData}`);
+
       return data;
     } catch (error) {
       console.log(error);

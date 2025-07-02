@@ -1,7 +1,13 @@
 import { useState } from "react";
+import Toast from "react-native-toast-message";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 
+import {
+  createYearPattern,
+  createTimePattern,
+  hasTwoMoreKeys,
+} from "../helpers/middleware";
 import { selectAuthUser } from "../redux/auth/authSelectors";
 import { createTask } from "../redux/tasks/tasksOperation";
 
@@ -15,9 +21,9 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-export default function PostsScreen() {
+export default function TasksScreen() {
   const dispatch = useDispatch();
-  const { email, username } = useSelector(selectAuthUser);
+  // const { email, username } = useSelector(selectAuthUser);
 
   const [breastFeed, setBreastFeed] = useState(null);
   const [milkFormula, setMilkFormula] = useState(null);
@@ -34,30 +40,38 @@ export default function PostsScreen() {
   const sendData = async () => {
     const date = new Date();
 
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-
-    const customDate = `${year}-${month}-${day}`;
-    const customTime = `0${date.getHours()}:0${date.getMinutes()}`;
-
     const formData = {
-      date: customDate,
-      time: customTime,
-      milkFormula: Number(milkFormula),
-      breastFeedingTime: Number(breastFeed),
-      poopSize,
-      isPee,
+      date: createYearPattern(date),
+      time: createTimePattern(date),
     };
 
-    console.log(formData);
+    if (milkFormula) formData.milkFormula = Number(milkFormula);
+    if (breastFeed) formData.breastFeedingTime = Number(breastFeedingTime);
+    if (poopSize) formData.poopSize = poopSize;
+    if (isPee) formData.isPee = isPee;
 
-    try {
-      dispatch(createTask(formData));
-    } catch (error) {
-      console.log(error);
+    console.log(isPee);
+
+    if (hasTwoMoreKeys(formData)) {
+      try {
+        dispatch(createTask(formData));
+        resetForm();
+        Toast.show({
+          type: "success", // 'success' | 'error' | 'info'
+          text1: "Created a task",
+          text2: "You can see a new task in the calendar.",
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      return;
     }
-    resetForm();
+
+    Toast.show({
+      type: "error", // 'success' | 'error' | 'info'
+      text1: "Bad request",
+      text2: "You must pick at least one value.",
+    });
   };
 
   const resetForm = () => {
@@ -75,17 +89,6 @@ export default function PostsScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.avatar_container}>
-        <View style={styles.avatar_empty}>
-          <Text>A</Text>
-        </View>
-
-        <View style={styles.text_container}>
-          <Text style={styles.text_username}>{username}</Text>
-          <Text style={styles.text_email}>{email}</Text>
-        </View>
-      </View>
-
       <View
         style={{ display: "flex", gap: 16, marginTop: 16, marginBottom: 16 }}
       >
@@ -181,7 +184,10 @@ export default function PostsScreen() {
             <Text style={{ fontSize: 20 }}>Poop</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => setActivePee(!activePee)}
+            onPress={() => {
+              setActivePee(!activePee);
+              setIsPee(!isPee);
+            }}
             style={[styles.button, activePee && styles.active_button]}
           >
             <Text style={{ fontSize: 20 }}>Pee</Text>

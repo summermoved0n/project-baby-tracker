@@ -9,7 +9,6 @@ import { selectAuthLoading } from "../redux/auth/authSelectors";
 import {
   StyleSheet,
   Text,
-  Alert,
   ImageBackground,
   View,
   TextInput,
@@ -56,7 +55,7 @@ export default function LoginScreen() {
             type: "success", // 'success' | 'error' | 'info'
             text1: "Welcome to your account",
           });
-          navigation.navigate("Posts");
+          navigation.navigate("Tasks");
         }
       } else if (logIn.rejected.match(resultAction)) {
         console.log(resultAction.payload);
@@ -145,17 +144,7 @@ export default function LoginScreen() {
 
         {isLoading && (
           <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              position: "absolute",
-              backgroundColor: "rgba(255,255,255,0.8)",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              zIndex: 100,
-            }}
+            style={styles.loading_conteiner}
           >
             <ActivityIndicator size="large" color="#FF6C00" />
           </View>
@@ -238,5 +227,16 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 16,
     color: "#1b4371",
+  },
+  loading_conteiner: {
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+    backgroundColor: "rgba(255,255,255,0.8)",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    zIndex: 100,
   },
 });

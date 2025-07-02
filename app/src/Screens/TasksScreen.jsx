@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { View, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
 
@@ -41,7 +41,7 @@ function Calendar() {
 
 const Tabs = createBottomTabNavigator();
 
-const Posts = () => {
+const Tasks = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
 
@@ -152,4 +152,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Posts;
+export default Tasks;

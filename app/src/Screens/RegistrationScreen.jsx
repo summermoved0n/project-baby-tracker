@@ -4,9 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
 
 import { register } from "../redux/auth/authOperation";
-import {
-  selectAuthLoading,
-} from "../redux/auth/authSelectors";
+import { selectAuthLoading } from "../redux/auth/authSelectors";
 
 import {
   StyleSheet,
@@ -74,7 +72,7 @@ export default function RegistrationScreen() {
     });
 
     try {
-      const resultAction = await dispatch(register(registerData));
+      const resultAction = dispatch(register(registerData));
 
       if (register.fulfilled.match(resultAction)) {
         const message = resultAction.payload?.message;

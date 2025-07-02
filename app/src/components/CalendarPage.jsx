@@ -69,8 +69,9 @@ export default function CalendarPage() {
       </View>
       <ScrollView>
         <Text>Tasks</Text>
-        {dayTasks?.length === 0 && <Text>Any notices at this day.</Text>}
-
+        {(!dayTasks || dayTasks.length === 0) && (
+          <Text>Any notices at this day.</Text>
+        )}
         {dayTasks?.map(({ _id, babyService }) => (
           <View key={_id}>
             {babyService?.map(
