@@ -16,3 +16,13 @@ export const hasTwoMoreKeys = (obj) => {
   const keys = Object.keys(obj);
   return keys.length > 2;
 };
+
+export const getMinutesDifference = (start, end) => {
+  const [h1, m1] = start.split(":").map(Number);
+  const [h2, m2] = end.split(":").map(Number);
+
+  const totalMinutesStart = h1 * 60 + m1;
+  const totalMinutesEnd = h2 * 60 + m2;
+
+  return totalMinutesEnd - totalMinutesStart;
+};

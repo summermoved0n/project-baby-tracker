@@ -101,13 +101,13 @@ const styles = StyleSheet.create({
   button_conteiner: {
     display: "flex",
     flexDirection: "row",
-    flexWrap: "wrap",
     gap: 10,
   },
   bottom_conteiner: {
     display: "flex",
     flexDirection: "row",
     gap: 5,
+    flexWrap: "wrap",
     // justifyContent: "center",
     alignItems: "center",
   },

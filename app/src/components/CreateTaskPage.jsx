@@ -1,11 +1,13 @@
 import { useState } from "react";
 import Toast from "react-native-toast-message";
 import { useDispatch } from "react-redux";
+import { useNavigation } from "@react-navigation/native";
 
 import {
   createYearPattern,
   createTimePattern,
   hasTwoMoreKeys,
+  getMinutesDifference,
 } from "../helpers/middleware";
 import { createTask } from "../redux/tasks/tasksOperation";
 
@@ -20,13 +22,16 @@ import {
 
 export default function CreateTaskPage() {
   const dispatch = useDispatch();
+  const navigation = useNavigation();
 
-  const [breastFeedingTime, setBreastFeedingTime] = useState(null);
   const [milkFormula, setMilkFormula] = useState(null);
   const [isPoop, setIsPoop] = useState(false);
   const [isPee, setIsPee] = useState(false);
   const [breastSide, setBreastSide] = useState(null);
   const [vitaminD, setVitaminD] = useState(false);
+
+  const [startFeed, setStartFeed] = useState("00:00");
+  const [endFeed, setEndFeed] = useState("00:00");
 
   const [activePoop, setActivePoop] = useState(false);
   const [activePee, setActivePee] = useState(false);
@@ -36,14 +41,19 @@ export default function CreateTaskPage() {
 
   const sendData = async () => {
     const date = new Date();
+    const countFeedTime = getMinutesDifference(startFeed, endFeed);
+
+    if (countFeedTime === 0) {
+      setStartFeed("00:00");
+      setEndFeed("00:00");
+    }
 
     const formData = {
       date: createYearPattern(date),
       time: createTimePattern(date),
     };
     if (milkFormula) formData.milkFormula = Number(milkFormula);
-    if (breastFeedingTime)
-      formData.breastFeedingTime = Number(breastFeedingTime);
+    if (countFeedTime) formData.breastFeedingTime = countFeedTime;
     if (isPoop) formData.isPoop = isPoop;
     if (isPee) formData.isPee = isPee;
     if (breastSide) formData.breastSide = breastSide;
@@ -59,6 +69,8 @@ export default function CreateTaskPage() {
           text1: "Created a task",
           text2: "You can see a new task in the calendar.",
         });
+
+        navigation.navigate("Calendar");
       } catch (error) {
         console.log(error);
       }
@@ -73,12 +85,14 @@ export default function CreateTaskPage() {
   };
 
   const resetForm = () => {
-    setBreastFeedingTime(null);
     setBreastSide(null);
     setMilkFormula(null);
     setIsPoop(false);
     setIsPee(false);
     setVitaminD(false);
+
+    setStartFeed("00:00");
+    setEndFeed("00:00");
 
     setActivePoop(false);
     setActivePee(false);
@@ -91,7 +105,7 @@ export default function CreateTaskPage() {
     <View style={styles.container}>
       <ScrollView style={styles.scroll_container}>
         <Text style={styles.food_header}>Types of food</Text>
-        <View style={styles.milk_container}>
+        <View style={[styles.milk_container, styles.border_conreiner]}>
           <Text style={styles.input_text}>Milk Formula</Text>
           <TextInput
             style={[styles.input, styles.milk_input]}
@@ -100,92 +114,113 @@ export default function CreateTaskPage() {
             keyboardType="number-pad"
             value={milkFormula}
             onChangeText={setMilkFormula}
-            editable={false}
           />
         </View>
 
-        <View>
+        <View style={styles.border_conreiner}>
           <Text style={styles.input_text}>Breast Feeding</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Breast Feeding"
-            placeholderTextColor="#bdbdbd"
-            keyboardType="number-pad"
-            value={breastFeedingTime}
-            onChangeText={setBreastFeedingTime}
-          />
-        </View>
+          <View style={styles.feeding_container}>
+            <View style={styles.container_row}>
+              <TouchableOpacity
+                style={[
+                  styles.button_small,
+                  startFeed !== "00:00" && styles.active_button,
+                ]}
+                disabled={startFeed !== "00:00"}
+                onPress={() => {
+                  const date = new Date();
+                  setStartFeed(createTimePattern(date));
+                }}
+              >
+                <Text style={styles.input_text}>Start</Text>
+              </TouchableOpacity>
 
-        <View
-          style={{
-            borderBottomColor: "gray",
-            borderBottomWidth: 1,
-            paddingBottom: 16,
-          }}
-        >
-          <Text>Lastest Breast</Text>
+              <View style={[styles.timer_container, styles.button_small]}>
+                <Text style={styles.input_text}>{startFeed}</Text>
+              </View>
+            </View>
 
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "space-between",
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                if (activeLeftBreast) {
-                  setBreastSide(null);
-                  setActiveLeftBreast(false);
-                  return;
-                }
-                setActiveLeftBreast(true);
-                setActiveRightBreast(false);
-                setBreastSide("left");
+            <View style={styles.container_row}>
+              <TouchableOpacity
+                style={[
+                  styles.button_small,
+                  endFeed !== "00:00" && styles.active_button,
+                ]}
+                disabled={endFeed !== "00:00" || startFeed === "00:00"}
+                onPress={() => {
+                  const date = new Date();
+                  setEndFeed(createTimePattern(date));
+                }}
+              >
+                <Text style={styles.input_text}>End</Text>
+              </TouchableOpacity>
+
+              <View style={[styles.timer_container, styles.button_small]}>
+                <Text style={styles.input_text}>{endFeed}</Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={{}}>
+            <Text style={styles.input_text}>Breast side</Text>
+
+            <View
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                gap: 20,
               }}
-              style={[
-                styles.button_small,
-                activeLeftBreast && styles.active_button,
-              ]}
             >
-              <Text style={{ fontSize: 20 }}>Left</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => {
-                if (activeRightBreast) {
-                  setBreastSide(null);
+              <TouchableOpacity
+                onPress={() => {
+                  if (activeLeftBreast) {
+                    setBreastSide(null);
+                    setActiveLeftBreast(false);
+                    return;
+                  }
+                  setActiveLeftBreast(true);
                   setActiveRightBreast(false);
-                  return;
-                }
-                setActiveLeftBreast(false);
-                setActiveRightBreast(true);
-                setBreastSide("right");
-              }}
-              style={[
-                styles.button_small,
-                activeRightBreast && styles.active_button,
-              ]}
-            >
-              <Text style={{ fontSize: 20 }}>Right</Text>
-            </TouchableOpacity>
+                  setBreastSide("left");
+                }}
+                style={[
+                  styles.button_small,
+                  activeLeftBreast && styles.active_button,
+                ]}
+              >
+                <Text style={styles.input_text}>Left</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  if (activeRightBreast) {
+                    setBreastSide(null);
+                    setActiveRightBreast(false);
+                    return;
+                  }
+                  setActiveLeftBreast(false);
+                  setActiveRightBreast(true);
+                  setBreastSide("right");
+                }}
+                style={[
+                  styles.button_small,
+                  activeRightBreast && styles.active_button,
+                ]}
+              >
+                <Text style={styles.input_text}>Right</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
 
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            flexWrap: "wrap",
-            gap: 16,
-          }}
-        >
+        <Text style={styles.food_header}>Diaper</Text>
+
+        <View style={[styles.diaper_container, styles.border_conreiner]}>
           <TouchableOpacity
             onPress={() => {
               setActivePoop(!activePoop);
               setIsPoop(!isPoop);
             }}
-            style={[styles.button, activePoop && styles.active_button]}
+            style={[styles.button_small, activePoop && styles.active_button]}
           >
             <Text style={{ fontSize: 20 }}>Poop</Text>
           </TouchableOpacity>
@@ -194,11 +229,15 @@ export default function CreateTaskPage() {
               setActivePee(!activePee);
               setIsPee(!isPee);
             }}
-            style={[styles.button, activePee && styles.active_button]}
+            style={[styles.button_small, activePee && styles.active_button]}
           >
             <Text style={{ fontSize: 20 }}>Pee</Text>
           </TouchableOpacity>
+        </View>
 
+        <Text style={styles.food_header}>Medicine</Text>
+
+        <View style={[styles.medical_container, styles.border_conreiner]}>
           <TouchableOpacity
             onPress={() => {
               setVitaminD(!vitaminD);
@@ -208,21 +247,20 @@ export default function CreateTaskPage() {
           >
             <Text style={{ fontSize: 20 }}>Vitamin D</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              setVitaminD(!vitaminD);
+              setActiveDropD(!activeDropD);
+            }}
+            style={[styles.button_small, activeDropD && styles.active_button]}
+          >
+            <Text style={{ fontSize: 20 }}>Eye Drop</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
 
-      <TouchableOpacity
-        style={{
-          left: "50%",
-          transform: [{ translateX: "-50%" }],
-          borderRadius: 16,
-          backgroundColor: "purple",
-          paddingTop: 10,
-          paddingBottom: 10,
-          width: 100,
-        }}
-        onPress={sendData}
-      >
+      <TouchableOpacity style={styles.send_data_btn} onPress={sendData}>
         <Text style={{ color: "#fff", textAlign: "center" }}>Send Data</Text>
       </TouchableOpacity>
     </View>
@@ -233,19 +271,51 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 16,
     paddingHorizontal: 16,
+    paddingBottom: 16,
     width: "100%",
     height: "100%",
     backgroundColor: "pink",
   },
+  container_row: { display: "flex", flexDirection: "row", gap: 20 },
   scroll_container: {
     display: "flex",
     gap: 16,
     marginBottom: 16,
   },
+  border_conreiner: {
+    borderWidth: 1,
+    borderColor: "purple",
+    padding: 8,
+    borderRadius: 16,
+  },
   milk_container: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
+    gap: 20,
+    marginBottom: 16,
+  },
+  timer_container: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 8,
+  },
+  feeding_container: {
+    display: "flex",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  diaper_container: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    gap: 20,
+  },
+  medical_container: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
     gap: 20,
   },
   food_header: {
@@ -267,15 +337,6 @@ const styles = StyleSheet.create({
   // milk_input: {
   //   width: 80,
   // },
-  button: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    width: 140,
-    height: 120,
-    borderRadius: 16,
-  },
   button_small: {
     display: "flex",
     justifyContent: "center",
@@ -288,5 +349,20 @@ const styles = StyleSheet.create({
   active_button: {
     borderColor: "purple",
     borderWidth: 2,
+  },
+  circle_button: {
+    backgroundColor: "#fff",
+    height: 40,
+    width: 40,
+    borderRadius: "50%",
+  },
+  send_data_btn: {
+    left: "50%",
+    transform: [{ translateX: "-50%" }],
+    borderRadius: 16,
+    backgroundColor: "purple",
+    paddingTop: 10,
+    paddingBottom: 10,
+    width: 100,
   },
 });
