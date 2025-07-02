@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Calendar } from "react-native-calendars";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { getDayTasks } from "../redux/tasks/tasksOperation";
 import { selectDayTasks } from "../redux/tasks/tasks.Selectors";
+import CalendarItem from "./CalendarItem";
 
 const today = new Date();
 
@@ -24,23 +25,8 @@ export default function CalendarPage() {
   }, [selectedDate]);
 
   return (
-    <View
-      style={{
-        paddingTop: 16,
-        paddingHorizontal: 16,
-        backgroundColor: "pink",
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <View
-        style={{
-          width: "100%",
-          height: 320,
-          borderRadius: 16,
-          overflow: "hidden",
-        }}
-      >
+    <View style={styles.calendar_conteiner}>
+      <View style={styles.calendar}>
         <Calendar
           onDayPress={(day) => {
             // console.log("selected day", day);
@@ -67,36 +53,48 @@ export default function CalendarPage() {
           }}
         />
       </View>
-      <ScrollView>
-        <Text>Tasks</Text>
+      <ScrollView style={styles.scroll_conteiner}>
+        <Text style={styles.scroll_header}>Tasks:</Text>
         {(!dayTasks || dayTasks.length === 0) && (
           <Text>Any notices at this day.</Text>
         )}
         {dayTasks?.map(({ _id, babyService }) => (
-          <View key={_id}>
-            {babyService?.map(
-              ({
-                _id,
-                time,
-                milkFormula,
-                breastFeedingTime,
-                poopSize,
-                isPee,
-              }) => (
-                <View key={_id}>
-                  <Text>{time}</Text>
-                  {milkFormula && <Text>- Milk formula: {milkFormula} ml</Text>}
-                  {breastFeedingTime && (
-                    <Text>- Breast Feed: {breastFeedingTime} min</Text>
-                  )}
-                  {poopSize && <Text>- Had a {poopSize} poop</Text>}
-                  {isPee && <Text>- Had a pee</Text>}
-                </View>
-              )
-            )}
+          <View key={_id} style={styles.tasks_list}>
+            {babyService?.map((items) => (
+              <CalendarItem key={items._id} babyService={items} />
+            ))}
           </View>
         ))}
       </ScrollView>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  calendar_conteiner: {
+    paddingTop: 16,
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    backgroundColor: "pink",
+    width: "100%",
+    height: "100%",
+  },
+  calendar: {
+    width: "100%",
+    height: 320,
+    borderRadius: 16,
+    overflow: "hidden",
+    marginBottom: 16,
+  },
+  scroll_conteiner: {},
+  scroll_header: {
+    marginLeft: 16,
+    color: "#000",
+    fontWeight: "500",
+    fontSize: 18,
+  },
+  tasks_list: {
+    display: "flex",
+    gap: 4,
+  },
+});

@@ -25,13 +25,14 @@ export default function TasksScreen() {
   const dispatch = useDispatch();
   // const { email, username } = useSelector(selectAuthUser);
 
-  const [breastFeed, setBreastFeed] = useState(null);
+  const [breastFeedingTime, setBreastFeedingTime] = useState(null);
   const [milkFormula, setMilkFormula] = useState(null);
-  const [poopSize, setPoopSize] = useState(null);
+  const [isPoop, setIsPoop] = useState(false);
   const [isPee, setIsPee] = useState(false);
+  const [breastSide, setBreastSide] = useState(null);
+  const [vitaminD, setVitaminD] = useState(false);
 
   const [activePoop, setActivePoop] = useState(false);
-  const [activeFart, setActiveFart] = useState(false);
   const [activePee, setActivePee] = useState(false);
   const [activeDropD, setActiveDropD] = useState(false);
   const [activeLeftBreast, setActiveLeftBreast] = useState(false);
@@ -44,16 +45,17 @@ export default function TasksScreen() {
       date: createYearPattern(date),
       time: createTimePattern(date),
     };
-
     if (milkFormula) formData.milkFormula = Number(milkFormula);
-    if (breastFeed) formData.breastFeedingTime = Number(breastFeedingTime);
-    if (poopSize) formData.poopSize = poopSize;
+    if (breastFeedingTime)
+      formData.breastFeedingTime = Number(breastFeedingTime);
+    if (isPoop) formData.isPoop = isPoop;
     if (isPee) formData.isPee = isPee;
-
-    console.log(isPee);
+    if (breastSide) formData.breastSide = breastSide;
+    if (vitaminD) formData.vitaminD = vitaminD;
 
     if (hasTwoMoreKeys(formData)) {
       try {
+        console.log(formData);
         dispatch(createTask(formData));
         resetForm();
         Toast.show({
@@ -75,12 +77,14 @@ export default function TasksScreen() {
   };
 
   const resetForm = () => {
-    setBreastFeed(null);
+    setBreastFeedingTime(null);
+    setBreastSide(null);
     setMilkFormula(null);
-    setPoopSize(null);
+    setIsPoop(false);
     setIsPee(false);
+    setVitaminD(false);
+
     setActivePoop(false);
-    setActiveFart(false);
     setActivePee(false);
     setActiveDropD(false);
     setActiveLeftBreast(false);
@@ -111,8 +115,8 @@ export default function TasksScreen() {
             placeholder="Breast Feeding"
             placeholderTextColor="#bdbdbd"
             keyboardType="number-pad"
-            value={breastFeed}
-            onChangeText={setBreastFeed}
+            value={breastFeedingTime}
+            onChangeText={setBreastFeedingTime}
           />
         </View>
 
@@ -135,10 +139,13 @@ export default function TasksScreen() {
             <TouchableOpacity
               onPress={() => {
                 if (activeLeftBreast) {
-                  return setActiveLeftBreast(false);
+                  setBreastSide(null);
+                  setActiveLeftBreast(false);
+                  return;
                 }
                 setActiveLeftBreast(true);
                 setActiveRightBreast(false);
+                setBreastSide("left");
               }}
               style={[
                 styles.button_small,
@@ -150,10 +157,13 @@ export default function TasksScreen() {
             <TouchableOpacity
               onPress={() => {
                 if (activeRightBreast) {
-                  return setActiveRightBreast(false);
+                  setBreastSide(null);
+                  setActiveRightBreast(false);
+                  return;
                 }
                 setActiveLeftBreast(false);
                 setActiveRightBreast(true);
+                setBreastSide("right");
               }}
               style={[
                 styles.button_small,
@@ -177,7 +187,7 @@ export default function TasksScreen() {
           <TouchableOpacity
             onPress={() => {
               setActivePoop(!activePoop);
-              setPoopSize("big");
+              setIsPoop(!isPoop);
             }}
             style={[styles.button, activePoop && styles.active_button]}
           >
@@ -195,18 +205,12 @@ export default function TasksScreen() {
 
           <TouchableOpacity
             onPress={() => {
-              setActiveFart(!activeFart);
-              setPoopSize("small");
+              setVitaminD(!vitaminD);
+              setActiveDropD(!activeDropD);
             }}
-            style={[styles.button_small, activeFart && styles.active_button]}
-          >
-            <Text style={{ fontSize: 20 }}>Fart</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setActiveDropD(!activeDropD)}
             style={[styles.button_small, activeDropD && styles.active_button]}
           >
-            <Text style={{ fontSize: 20 }}>DropD</Text>
+            <Text style={{ fontSize: 20 }}>Vitamin D</Text>
           </TouchableOpacity>
         </View>
       </View>
