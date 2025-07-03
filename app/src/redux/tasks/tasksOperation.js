@@ -38,3 +38,21 @@ export const getDayTasks = createAsyncThunk(
     }
   }
 );
+
+export const deleteOneTask = createAsyncThunk(
+  "tasks/deleteOneTask",
+  async (id, { rejectWithValue }) => {
+    try {
+      const { data } = await axios.post(`/tasks/${id}`);
+
+      return data;
+    } catch (error) {
+      console.log(error);
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong";
+      return rejectWithValue(message);
+    }
+  }
+);

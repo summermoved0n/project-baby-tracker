@@ -37,6 +37,12 @@ export default function RegistrationScreen() {
 
   const [isSecurePassword, setIsSecurePassword] = useState(true);
 
+  const resetRegistration = () => {
+    setUsername("");
+    setEmail("");
+    setPassword("");
+  };
+
   const onRegistration = async () => {
     const usernameTrim = username.trim();
     if (usernameTrim.length < 3 || usernameTrim.length > 20) {
@@ -71,38 +77,25 @@ export default function RegistrationScreen() {
       password: passwordTrim,
     });
 
-    try {
-      const resultAction = dispatch(register(registerData));
-
-      if (register.fulfilled.match(resultAction)) {
-        const message = resultAction.payload?.message;
-        if (message === "Create success") {
-          Toast.show({
-            type: "success", // 'success' | 'error' | 'info'
-            text1: "Create success",
-            text2: "Now you can sign in your account",
-          });
-          navigation.navigate("Login");
-        } else {
-          Toast.show({
-            type: "error", // 'success' | 'error' | 'info'
-            text1: "Something went wrong",
-          });
-        }
-      } else if (register.rejected.match(resultAction)) {
+    dispatch(register(registerData))
+      .unwrap()
+      .then((res) => {
+        resetRegistration();
+        Toast.show({
+          type: "success", // 'success' | 'error' | 'info'
+          text1: res.message || "Success",
+          text2: "Now you can sign in your account",
+        });
+        navigation.navigate("Login");
+      })
+      .catch((err) => {
+        console.log("Errrrrrrrror", err);
         Toast.show({
           type: "error", // 'success' | 'error' | 'info'
-          text1: resultAction.payload,
-          // text2: "Тепер ви можете увійти 🚀",
+          text1: err.message || err || "Error",
+          text2: "Something went wrong",
         });
-      }
-    } catch (err) {
-      Toast.show({
-        type: "error", // 'success' | 'error' | 'info'
-        text1: err.message,
-        // text2: "Тепер ви можете увійти 🚀",
       });
-    }
   };
 
   return (

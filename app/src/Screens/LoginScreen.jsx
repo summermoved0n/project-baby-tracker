@@ -39,41 +39,25 @@ export default function LoginScreen() {
       password,
     };
 
-    try {
-      const resultAction = await dispatch(logIn(loginData));
-
-      if (logIn.fulfilled.match(resultAction)) {
-        const message = resultAction.payload?.message;
-        if (message === "Email or password valid") {
-          Toast.show({
-            type: "error", // 'success' | 'error' | 'info'
-            text1: "Error",
-            text2: "Email or password valid",
-          });
-        } else {
-          Toast.show({
-            type: "success", // 'success' | 'error' | 'info'
-            text1: "Welcome to your account",
-          });
-          navigation.navigate("Tasks");
-        }
-      } else if (logIn.rejected.match(resultAction)) {
-        console.log(resultAction.payload);
+    dispatch(logIn(loginData))
+      .unwrap()
+      .then((res) => {
+        setEmail("");
+        setPassword("");
+        Toast.show({
+          type: "success", // 'success' | 'error' | 'info'
+          text1: res.message || "Welcome to your account",
+        });
+        navigation.navigate("Tasks");
+      })
+      .catch((err) => {
+        console.log("Errrrrrrrror", err);
         Toast.show({
           type: "error", // 'success' | 'error' | 'info'
-          text1: resultAction.payload.message,
-          text2: "error",
-          // text2: "Тепер ви можете увійти 🚀",
+          text1: err.message || err || "Error",
+          text2: "Something went wrong",
         });
-      }
-    } catch (err) {
-      Toast.show({
-        type: "error", // 'success' | 'error' | 'info'
-        text1: "Error",
-        text2: err.message,
-        // text2: "Тепер ви можете увійти 🚀",
       });
-    }
   };
 
   return (
@@ -102,6 +86,9 @@ export default function LoginScreen() {
                 placeholderTextColor="#bdbdbd"
                 value={email}
                 onChangeText={setEmail}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
               />
 
               <View>
@@ -143,9 +130,7 @@ export default function LoginScreen() {
         </ImageBackground>
 
         {isLoading && (
-          <View
-            style={styles.loading_conteiner}
-          >
+          <View style={styles.loading_conteiner}>
             <ActivityIndicator size="large" color="#FF6C00" />
           </View>
         )}

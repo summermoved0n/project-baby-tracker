@@ -1,4 +1,3 @@
-import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
@@ -18,6 +17,8 @@ export default function CalendarItem({ babyService }) {
     breastSide,
   } = babyService;
 
+  const onPressDelete = (id) => {};
+
   return (
     <View key={_id} style={styles.conteiner}>
       <View style={styles.top_conteiner}>
@@ -29,7 +30,7 @@ export default function CalendarItem({ babyService }) {
           <TouchableOpacity>
             <FontAwesome6 name="edit" size={20} color="black" />
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => onPressDelete(_id)}>
             <Ionicons name="trash-bin-outline" size={22} color="black" />
           </TouchableOpacity>
         </View>
