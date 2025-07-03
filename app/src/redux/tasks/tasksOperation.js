@@ -41,9 +41,9 @@ export const getDayTasks = createAsyncThunk(
 
 export const deleteOneTask = createAsyncThunk(
   "tasks/deleteOneTask",
-  async (id, { rejectWithValue }) => {
+  async (data, { rejectWithValue }) => {
     try {
-      const { data } = await axios.post(`/tasks/${id}`);
+      const { data } = await axios.delete(`/tasks/${id}/${id}`);
 
       return data;
     } catch (error) {

@@ -4,6 +4,9 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Entypo from "@expo/vector-icons/Entypo";
+import { selectDayTasks } from "../redux/tasks/tasks.Selectors";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteOneTask } from "../redux/tasks/tasksOperation";
 
 export default function CalendarItem({ babyService }) {
   const {
@@ -17,7 +20,20 @@ export default function CalendarItem({ babyService }) {
     breastSide,
   } = babyService;
 
-  const onPressDelete = (id) => {};
+  const dispatch = useDispatch();
+  const dayTask = useSelector(selectDayTasks);
+
+  const onPressDelete = (id) => {
+    const getDayId = dayTask.map((item) => item._id);
+    console.log("date ID", getDayId[0]);
+    console.log("task ID", id);
+    const data = {
+      dayId: getDayId[0],
+      taskId: id,
+    };
+
+    dispatch(deleteOneTask(data));
+  };
 
   return (
     <View key={_id} style={styles.conteiner}>
