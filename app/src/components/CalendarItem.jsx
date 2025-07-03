@@ -25,9 +25,8 @@ export default function CalendarItem({ babyService }) {
 
   const onPressDelete = (id) => {
     const getDayId = dayTask.map((item) => item._id);
-    console.log("date ID", getDayId[0]);
-    console.log("task ID", id);
     const data = {
+      date: dayTask.date,
       dayId: getDayId[0],
       taskId: id,
     };
