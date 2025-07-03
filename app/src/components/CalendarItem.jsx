@@ -25,13 +25,16 @@ export default function CalendarItem({ babyService }) {
 
   const onPressDelete = (id) => {
     const getDayId = dayTask.map((item) => item._id);
+
     const data = {
-      date: dayTask.date,
+      date: dayTask[0].date,
       dayId: getDayId[0],
       taskId: id,
     };
 
-    dispatch(deleteOneTask(data));
+    dispatch(deleteOneTask(data)).then((res) =>
+      console.log("Tasks after reload:", res)
+    );
   };
 
   return (

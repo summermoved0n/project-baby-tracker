@@ -15,6 +15,8 @@ export default function CalendarPage() {
     today.toISOString().split("T")[0]
   );
 
+  console.log(dayTasks);
+
   useEffect(() => {
     console.log(selectedDate);
     dispatch(getDayTasks(selectedDate));
@@ -22,7 +24,7 @@ export default function CalendarPage() {
     return () => {
       console.log("unmount component");
     };
-  }, [selectedDate]);
+  }, [selectedDate, dispatch]);
 
   return (
     <View style={styles.calendar_conteiner}>
