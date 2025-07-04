@@ -110,7 +110,7 @@ export default function CreateTaskPage() {
           <TextInput
             style={[styles.input, styles.milk_input]}
             placeholder="ml"
-            placeholderTextColor="#bdbdbd"
+            placeholderTextColor="#000"
             keyboardType="number-pad"
             value={milkFormula}
             onChangeText={setMilkFormula}
@@ -281,11 +281,15 @@ const styles = StyleSheet.create({
     display: "flex",
     gap: 16,
     marginBottom: 16,
+    // paddingBottom: 8,
+    borderBottomColor: "gray",
+    borderBottomWidth: 1,
   },
   border_conreiner: {
     borderWidth: 1,
     borderColor: "purple",
-    padding: 8,
+    backgroundColor: "#fff",
+    padding: 16,
     borderRadius: 16,
   },
   milk_container: {
@@ -330,18 +334,16 @@ const styles = StyleSheet.create({
     color: "gray",
   },
   input: {
-    backgroundColor: "#fff",
+    backgroundColor: "pink",
     paddingHorizontal: 16,
     borderRadius: 16,
   },
-  // milk_input: {
-  //   width: 80,
-  // },
+
   button_small: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: "pink",
     width: 140,
     height: 60,
     borderRadius: 16,

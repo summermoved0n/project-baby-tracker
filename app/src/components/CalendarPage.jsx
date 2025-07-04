@@ -3,19 +3,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { Calendar } from "react-native-calendars";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { getDayTasks } from "../redux/tasks/tasksOperation";
-import { selectDayTasks } from "../redux/tasks/tasks.Selectors";
+import {
+  selectDayTasks,
+  selectOpenModal,
+} from "../redux/tasks/tasks.Selectors";
 import CalendarItem from "./CalendarItem";
+import Modal from "./Modal";
 
 const today = new Date();
 
 export default function CalendarPage() {
   const dispatch = useDispatch();
   const dayTasks = useSelector(selectDayTasks);
+  const isModal = useSelector(selectOpenModal);
+  console.log(isModal);
+
   const [selectedDate, setSelectedDate] = useState(
-    today.toISOString().split("T")[0]
+    today.toLocaleDateString("sv-SE")
   );
 
-  console.log(dayTasks);
+  // console.log(selectedDate);
 
   useEffect(() => {
     console.log(selectedDate);
@@ -69,12 +76,19 @@ export default function CalendarPage() {
           </View>
         ))}
       </ScrollView>
+
+      {isModal && (
+        <Modal>
+          <Text>Hello</Text>
+        </Modal>
+      )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   calendar_conteiner: {
+    position: "relative",
     paddingTop: 16,
     paddingHorizontal: 16,
     paddingBottom: 16,

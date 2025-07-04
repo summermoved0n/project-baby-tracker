@@ -7,6 +7,7 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { selectDayTasks } from "../redux/tasks/tasks.Selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteOneTask } from "../redux/tasks/tasksOperation";
+import { openModal } from "../redux/tasks/tasksReducer";
 
 export default function CalendarItem({ babyService }) {
   const {
@@ -37,6 +38,10 @@ export default function CalendarItem({ babyService }) {
     );
   };
 
+  const onPressEdit = () => {
+    dispatch(openModal());
+  };
+
   return (
     <View key={_id} style={styles.conteiner}>
       <View style={styles.top_conteiner}>
@@ -45,7 +50,7 @@ export default function CalendarItem({ babyService }) {
           <Text style={styles.breast_side}>Last breast: {breastSide}</Text>
         )}
         <View style={styles.button_conteiner}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => onPressEdit()}>
             <FontAwesome6 name="edit" size={20} color="black" />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => onPressDelete(_id)}>
