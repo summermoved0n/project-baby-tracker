@@ -16,13 +16,10 @@ export default function CalendarPage() {
   const dispatch = useDispatch();
   const dayTasks = useSelector(selectDayTasks);
   const isModal = useSelector(selectOpenModal);
-  console.log(isModal);
 
   const [selectedDate, setSelectedDate] = useState(
     today.toLocaleDateString("sv-SE")
   );
-
-  // console.log(selectedDate);
 
   useEffect(() => {
     console.log(selectedDate);

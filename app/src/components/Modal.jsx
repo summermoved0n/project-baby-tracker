@@ -1,21 +1,19 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Animated } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { closeModal } from "../redux/tasks/tasksReducer";
-import { selectOpenModal } from "../redux/tasks/tasks.Selectors";
 import { useEffect, useRef } from "react";
 
 export default function Modal({ children }) {
   const dispatch = useDispatch();
-  // const isModal = useSelector(selectOpenModal);
   const fadeAnim = useRef(new Animated.Value(0)).current; // старт з opacity 0
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
-      toValue: 1, // кінцеве значення opacity
-      duration: 500, // мс
-      useNativeDriver: true, // покращена продуктивність
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
     }).start();
   }, []);
 
