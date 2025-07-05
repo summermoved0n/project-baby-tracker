@@ -2,6 +2,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -10,11 +11,16 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { selectEditData } from "../redux/tasks/tasks.Selectors";
 import { updateOneTask } from "../redux/tasks/tasksOperation";
+import Selector from "./Selector";
 
 export default function EditModal() {
   const dispatch = useDispatch();
   const editData = useSelector(selectEditData);
   console.log(editData);
+
+  const [time, setTime] = useState(null);
+  const [hours, setHours] = useState(null);
+  const [minutes, setMinutes] = useState(null);
 
   const [milkFormula, setMilkFormula] = useState(null);
   const [breastFeedingTime, setBreastFeedingTime] = useState(null);
@@ -34,8 +40,36 @@ export default function EditModal() {
 
   return (
     <Modal>
+      <Text style={styles.edit_header}>Edit Task</Text>
       <ScrollView style={styles.scroll_container}>
-        <Text>EditModal</Text>
+        <View style={styles.milk_container}>
+          <Text style={styles.input_text}>Time</Text>
+
+          <Selector />
+          <Text>:</Text>
+          <TextInput
+            style={[styles.input, styles.milk_input]}
+            placeholder="00"
+            placeholderTextColor="#000"
+            keyboardType="number-pad"
+            value={minutes}
+            onChangeText={setMinutes}
+            maxLength={2}
+          />
+        </View>
+
+        <View style={styles.milk_container}>
+          <Text style={styles.input_text}>Milk Formula</Text>
+          <TextInput
+            style={[styles.input, styles.milk_input]}
+            placeholder="ml"
+            placeholderTextColor="#000"
+            keyboardType="number-pad"
+            value={milkFormula}
+            onChangeText={setMilkFormula}
+            maxLength={3}
+          />
+        </View>
       </ScrollView>
 
       <View style={styles.send_btn_container}>
@@ -48,7 +82,29 @@ export default function EditModal() {
 }
 
 const styles = StyleSheet.create({
-  scroll_container: { height: 390 },
+  scroll_container: { height: 360 },
+  edit_header: {
+    fontWeight: "500",
+    fontSize: 20,
+    textAlign: "center",
+    marginBottom: 10,
+  },
+  milk_container: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  input_text: {
+    fontWeight: "500",
+    fontSize: 18,
+    color: "gray",
+  },
+  input: {
+    backgroundColor: "pink",
+    paddingHorizontal: 16,
+    borderRadius: 16,
+  },
   send_btn_container: {
     display: "flex",
     justifyContent: "center",

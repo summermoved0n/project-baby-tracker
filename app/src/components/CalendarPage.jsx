@@ -71,9 +71,17 @@ export default function CalendarPage() {
         )}
         {dayTasks?.map(({ _id, babyService }) => (
           <View key={_id} style={styles.tasks_list}>
-            {babyService?.map((items) => (
-              <CalendarItem key={items._id} babyService={items} />
-            ))}
+            {babyService
+              ?.slice()
+              .sort((a, b) => {
+                const [aHours, aMinutes] = a.time.split(":").map(Number);
+                const [bHours, bMinutes] = b.time.split(":").map(Number);
+
+                return aHours * 60 + aMinutes - (bHours * 60 + bMinutes);
+              })
+              .map((items) => (
+                <CalendarItem key={items._id} babyService={items} />
+              ))}
           </View>
         ))}
       </ScrollView>

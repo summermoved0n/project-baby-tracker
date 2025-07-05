@@ -338,7 +338,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 16,
   },
-
   button_small: {
     display: "flex",
     justifyContent: "center",
