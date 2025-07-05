@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Calendar } from "react-native-calendars";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { getDayTasks } from "../redux/tasks/tasksOperation";
 import {
   selectDayTasks,
+  selectModalType,
   selectOpenModal,
 } from "../redux/tasks/tasks.Selectors";
 import CalendarItem from "./CalendarItem";
 import Modal from "./Modal";
+import DeleteModal from "./DeleteModal";
+import EditModal from "./EditModal";
 
 const today = new Date();
 
@@ -16,6 +19,8 @@ export default function CalendarPage() {
   const dispatch = useDispatch();
   const dayTasks = useSelector(selectDayTasks);
   const isModal = useSelector(selectOpenModal);
+  const modalType = useSelector(selectModalType);
+  console.log(modalType);
 
   const [selectedDate, setSelectedDate] = useState(
     today.toLocaleDateString("sv-SE")
@@ -74,11 +79,8 @@ export default function CalendarPage() {
         ))}
       </ScrollView>
 
-      {isModal && (
-        <Modal>
-          <Text>Hello</Text>
-        </Modal>
-      )}
+      {isModal && modalType === "delete" && <DeleteModal />}
+      {isModal && modalType === "edit" && <EditModal />}
     </View>
   );
 }

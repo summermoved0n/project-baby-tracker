@@ -4,6 +4,9 @@ import { createTask, getDayTasks, deleteOneTask } from "./tasksOperation";
 const initialState = {
   dayTasks: [],
   isModal: false,
+  modalType: null,
+  deleteData: null,
+  editData: null,
 };
 
 const tasksSlice = createSlice({
@@ -15,6 +18,15 @@ const tasksSlice = createSlice({
     },
     closeModal(state, { payload }) {
       state.isModal = false;
+    },
+    setModalType(state, { payload }) {
+      state.modalType = payload;
+    },
+    setDeleteData(state, { payload }) {
+      state.deleteData = payload;
+    },
+    setEditData(state, { payload }) {
+      state.editData = payload;
     },
   },
   extraReducers: (builder) =>
@@ -28,5 +40,11 @@ const tasksSlice = createSlice({
       }),
 });
 
-export const { openModal, closeModal } = tasksSlice.actions;
+export const {
+  openModal,
+  closeModal,
+  setModalType,
+  setDeleteData,
+  setEditData,
+} = tasksSlice.actions;
 export const tasksReducer = tasksSlice.reducer;

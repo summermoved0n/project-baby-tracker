@@ -7,7 +7,11 @@ import Entypo from "@expo/vector-icons/Entypo";
 import { selectDayTasks } from "../redux/tasks/tasks.Selectors";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteOneTask } from "../redux/tasks/tasksOperation";
-import { openModal } from "../redux/tasks/tasksReducer";
+import {
+  openModal,
+  setDeleteData,
+  setModalType,
+} from "../redux/tasks/tasksReducer";
 
 export default function CalendarItem({ babyService }) {
   const {
@@ -33,12 +37,17 @@ export default function CalendarItem({ babyService }) {
       taskId: id,
     };
 
-    dispatch(deleteOneTask(data)).then((res) =>
-      console.log("Tasks after reload:", res)
-    );
+    dispatch(setDeleteData(data));
+    dispatch(openModal());
+    dispatch(setModalType("delete"));
+
+    // dispatch(deleteOneTask(data)).then((res) =>
+    //   console.log("Tasks after reload:", res)
+    // );
   };
 
   const onPressEdit = () => {
+    dispatch(setModalType("edit"));
     dispatch(openModal());
   };
 

@@ -2,12 +2,12 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Animated } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 import { useDispatch } from "react-redux";
-import { closeModal } from "../redux/tasks/tasksReducer";
+import { closeModal, setModalType } from "../redux/tasks/tasksReducer";
 import { useEffect, useRef } from "react";
 
 export default function Modal({ children }) {
   const dispatch = useDispatch();
-  const fadeAnim = useRef(new Animated.Value(0)).current; // старт з opacity 0
+  const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -18,6 +18,7 @@ export default function Modal({ children }) {
   }, []);
 
   const noModal = () => {
+    dispatch(setModalType(null));
     dispatch(closeModal());
   };
 
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     position: "relative",
     backgroundColor: "#fff",
     width: 300,
-    height: 500,
+    // height: 500,
     borderRadius: 16,
     padding: 20,
   },
