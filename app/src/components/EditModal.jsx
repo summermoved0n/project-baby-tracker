@@ -9,18 +9,22 @@ import {
 import Modal from "./Modal";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectEditData } from "../redux/tasks/tasks.Selectors";
+import {
+  selectDayTasks,
+  selectEditData,
+  selectTaskTime,
+} from "../redux/tasks/tasks.Selectors";
 import { updateOneTask } from "../redux/tasks/tasksOperation";
 import Selector from "./Selector";
+import { closeModal } from "../redux/tasks/tasksReducer";
 
 export default function EditModal() {
   const dispatch = useDispatch();
+  const dayTasks = useSelector(selectDayTasks);
   const editData = useSelector(selectEditData);
-  console.log(editData);
+  const taskTime = useSelector(selectTaskTime);
 
-  const [time, setTime] = useState(null);
-  const [hours, setHours] = useState(null);
-  const [minutes, setMinutes] = useState(null);
+  console.log(taskTime);
 
   const [milkFormula, setMilkFormula] = useState(null);
   const [breastFeedingTime, setBreastFeedingTime] = useState(null);
@@ -30,12 +34,28 @@ export default function EditModal() {
   const [vitaminD, setVitaminD] = useState(false);
 
   const onSubmit = () => {
+    const { hours, minutes } = taskTime || {};
+
+    if (!hours || !minutes) {
+      return dispatch(closeModal());
+    }
+
+    const time = `${hours}:${minutes}`;
+    console.log("🕒 Обране: ", time);
+    console.log(editData._id);
+
     const data = {
-      dayId: "getDayId",
-      taskId: "id",
+      date: dayTasks[0].date,
+      dayId: dayTasks[0]._id,
+      taskId: editData._id,
+      updateData: {
+        time,
+      },
     };
 
-    dispatch(updateOneTask());
+    dispatch(updateOneTask(data))
+      .then()
+      .finally(() => dispatch(closeModal()));
   };
 
   return (
@@ -46,16 +66,6 @@ export default function EditModal() {
           <Text style={styles.input_text}>Time</Text>
 
           <Selector />
-          <Text>:</Text>
-          <TextInput
-            style={[styles.input, styles.milk_input]}
-            placeholder="00"
-            placeholderTextColor="#000"
-            keyboardType="number-pad"
-            value={minutes}
-            onChangeText={setMinutes}
-            maxLength={2}
-          />
         </View>
 
         <View style={styles.milk_container}>
@@ -93,7 +103,7 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    gap: 6,
+    // gap: 6,
   },
   input_text: {
     fontWeight: "500",

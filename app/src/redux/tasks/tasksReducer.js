@@ -7,6 +7,10 @@ const initialState = {
   modalType: null,
   deleteData: null,
   editData: null,
+  task: {
+    hours: null,
+    minutes: null,
+  },
 };
 
 const tasksSlice = createSlice({
@@ -28,16 +32,18 @@ const tasksSlice = createSlice({
     setEditData(state, { payload }) {
       state.editData = payload;
     },
+    setTaskHours(state, { payload }) {
+      state.task.hours = payload;
+    },
+    setTaskMinutes(state, { payload }) {
+      state.task.minutes = payload;
+    },
   },
   extraReducers: (builder) =>
-    builder
-      // .addCase(createTask.fulfilled, (state, { payload }) => {
-      //   // console.log(payload);
-      // })
-      .addCase(getDayTasks.fulfilled, (state, { payload }) => {
-        // console.log("🎯 Отримано з бекенду:", JSON.stringify(payload, null, 2));
-        state.dayTasks = payload;
-      }),
+    builder.addCase(getDayTasks.fulfilled, (state, { payload }) => {
+      // console.log("🎯 Отримано з бекенду:", JSON.stringify(payload, null, 2));
+      state.dayTasks = payload;
+    }),
 });
 
 export const {
@@ -46,5 +52,7 @@ export const {
   setModalType,
   setDeleteData,
   setEditData,
+  setTaskHours,
+  setTaskMinutes,
 } = tasksSlice.actions;
 export const tasksReducer = tasksSlice.reducer;
