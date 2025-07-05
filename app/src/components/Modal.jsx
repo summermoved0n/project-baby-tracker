@@ -1,12 +1,14 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Animated } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { closeModal, setModalType } from "../redux/tasks/tasksReducer";
 import { useEffect, useRef } from "react";
+import { selectModalType } from "../redux/tasks/tasks.Selectors";
 
 export default function Modal({ children }) {
   const dispatch = useDispatch();
+  const modalType = useSelector(selectModalType);
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
@@ -24,9 +26,11 @@ export default function Modal({ children }) {
 
   return (
     <View style={styles.modal_containet}>
-      <TouchableOpacity style={styles.close_icon} onPress={() => noModal()}>
-        <Feather name="x" size={24} color="#fff" />
-      </TouchableOpacity>
+      {modalType !== "delete" && (
+        <TouchableOpacity style={styles.close_icon} onPress={() => noModal()}>
+          <Feather name="x" size={24} color="#fff" />
+        </TouchableOpacity>
+      )}
       <Animated.View style={[styles.modal_content, { opacity: fadeAnim }]}>
         {children}
       </Animated.View>

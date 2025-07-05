@@ -20,7 +20,6 @@ export default function CalendarPage() {
   const dayTasks = useSelector(selectDayTasks);
   const isModal = useSelector(selectOpenModal);
   const modalType = useSelector(selectModalType);
-  console.log(modalType);
 
   const [selectedDate, setSelectedDate] = useState(
     today.toLocaleDateString("sv-SE")

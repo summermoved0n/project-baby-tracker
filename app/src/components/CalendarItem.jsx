@@ -6,10 +6,10 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Entypo from "@expo/vector-icons/Entypo";
 import { selectDayTasks } from "../redux/tasks/tasks.Selectors";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteOneTask } from "../redux/tasks/tasksOperation";
 import {
   openModal,
   setDeleteData,
+  setEditData,
   setModalType,
 } from "../redux/tasks/tasksReducer";
 
@@ -40,13 +40,12 @@ export default function CalendarItem({ babyService }) {
     dispatch(setDeleteData(data));
     dispatch(openModal());
     dispatch(setModalType("delete"));
-
-    // dispatch(deleteOneTask(data)).then((res) =>
-    //   console.log("Tasks after reload:", res)
-    // );
   };
 
-  const onPressEdit = () => {
+  const onPressEdit = (id) => {
+    const currentTask = dayTask[0].babyService.find((item) => item._id === id);
+
+    dispatch(setEditData(currentTask));
     dispatch(setModalType("edit"));
     dispatch(openModal());
   };
@@ -59,7 +58,7 @@ export default function CalendarItem({ babyService }) {
           <Text style={styles.breast_side}>Last breast: {breastSide}</Text>
         )}
         <View style={styles.button_conteiner}>
-          <TouchableOpacity onPress={() => onPressEdit()}>
+          <TouchableOpacity onPress={() => onPressEdit(_id)}>
             <FontAwesome6 name="edit" size={20} color="black" />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => onPressDelete(_id)}>
