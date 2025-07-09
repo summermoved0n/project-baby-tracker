@@ -2,7 +2,7 @@ import { useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import { useDispatch } from "react-redux";
-import { setTaskHours, s, setTaskMinutes } from "../redux/tasks/tasksReducer";
+import { setTaskHours, setTaskMinutes } from "../redux/tasks/tasksReducer";
 
 export default function TimePickerSplit() {
   const dispatch = useDispatch();
