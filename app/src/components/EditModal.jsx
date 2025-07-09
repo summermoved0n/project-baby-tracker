@@ -25,7 +25,7 @@ import {
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import Entypo from "@expo/vector-icons/Entypo";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function EditModal() {
   const dispatch = useDispatch();
@@ -33,19 +33,16 @@ export default function EditModal() {
   const editData = useSelector(selectEditData);
   const taskTime = useSelector(selectTaskTime);
 
-  console.log(editData);
-
   const [milkFormula, setMilkFormula] = useState(null);
   const [breastFeedingTime, setBreastFeedingTime] = useState(null);
-  const [breastSide, setBreastSide] = useState(null);
+  const [breastSide, setBreastSide] = useState(editData.breastSide || null);
   const [isPoop, setIsPoop] = useState(editData.isPoop || false);
   const [isPee, setIsPee] = useState(editData.isPee || false);
   const [vitaminD, setVitaminD] = useState(editData.vitaminD || false);
+  const [eyeDrop, setEyeDrop] = useState(editData.eyeDrop || false);
 
   const onSubmit = () => {
     const { hours, minutes } = taskTime || {};
-
-    // console.log("🕒 Обране: ", time);
 
     const data = {
       date: dayTasks[0].date,
@@ -54,16 +51,16 @@ export default function EditModal() {
       updateData: {},
     };
 
-    console.log(data);
-
     if (hours && minutes) data.updateData.time = `${hours}:${minutes}`;
     if (milkFormula) data.updateData.milkFormula = Number(milkFormula);
     if (breastFeedingTime)
       data.updateData.breastFeedingTime = Number(breastFeedingTime);
+    if (breastSide) data.updateData.breastSide = breastSide;
     if (isPoop !== null || isPoop !== undefined)
       data.updateData.isPoop = isPoop;
-
-    console.log(data);
+    if (isPee !== null || isPee !== undefined) data.updateData.isPee = isPee;
+    if (vitaminD !== null || vitaminD !== undefined)
+      data.updateData.vitaminD = vitaminD;
 
     dispatch(updateOneTask(data))
       .then()
@@ -95,6 +92,42 @@ export default function EditModal() {
             onChangeText={setBreastFeedingTime}
             maxLength={2}
           />
+          <Text>Hello</Text>
+        </View>
+
+        <View
+          style={{
+            flexDirection: "row",
+            gap: 30,
+            justifyContent: "center",
+            marginVertical: 6,
+          }}
+        >
+          <TouchableOpacity
+            style={[
+              styles.button,
+              styles.btn_breast_side,
+              breastSide === "left" && styles.active_button,
+            ]}
+            onPress={() => {
+              setBreastSide("left");
+            }}
+          >
+            <Text style={styles.text_button}>Left</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.button,
+              styles.btn_breast_side,
+              breastSide === "right" && styles.active_button,
+            ]}
+            onPress={() => {
+              setBreastSide("right");
+            }}
+          >
+            <Text style={styles.text_button}>Right</Text>
+          </TouchableOpacity>
         </View>
 
         <View style={styles.milk_container}>
@@ -110,7 +143,7 @@ export default function EditModal() {
           />
         </View>
 
-        <Text style={styles.diaper_header}>Diaper`s staff</Text>
+        <Text style={styles.section_header}>Diaper`s staff</Text>
 
         <View
           style={{ flexDirection: "row", gap: 30, justifyContent: "center" }}
@@ -134,15 +167,55 @@ export default function EditModal() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.button, styles.btn_poop]}
-            onPress={() => {}}
+            style={[
+              styles.button,
+              styles.btn_pee,
+              isPee && styles.active_button,
+            ]}
+            onPress={() => {
+              setIsPee(!isPee);
+            }}
           >
-            <MaterialCommunityIcons
-              name="emoticon-poop"
-              size={18}
+            <Ionicons name="water-outline" size={16} color="black" />
+            <Text style={styles.text_button}>Pee</Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text style={styles.section_header}>Medicine</Text>
+
+        <View
+          style={{ flexDirection: "row", gap: 30, justifyContent: "center" }}
+        >
+          <TouchableOpacity
+            style={[
+              styles.button,
+              styles.btn_vitamin,
+              vitaminD && styles.active_button,
+            ]}
+            onPress={() => {
+              setVitaminD(!vitaminD);
+            }}
+          >
+            <FontAwesome6
+              name="prescription-bottle-medical"
+              size={14}
               color="black"
             />
-            <Text style={styles.text_button}>No Poop</Text>
+            <Text style={styles.text_button}>Vitamin D</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.button,
+              styles.btn_eye_drop,
+              eyeDrop && styles.active_button,
+            ]}
+            onPress={() => {
+              setEyeDrop(!eyeDrop);
+            }}
+          >
+            <FontAwesome name="eye" size={16} color="black" />
+            <Text style={styles.text_button}>Eye Drop</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
@@ -184,7 +257,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderRadius: 16,
   },
-  diaper_header: {
+  section_header: {
     textAlign: "center",
     fontWeight: "500",
     fontSize: 18,
@@ -203,6 +276,7 @@ const styles = StyleSheet.create({
   active_button: { borderColor: "#f02951", borderWidth: 2 },
 
   text_button: { fontWeight: "500", fontSize: 16 },
+  btn_breast_side: { backgroundColor: "pink" },
   btn_vitamin: {
     backgroundColor: "#59e37a",
   },
@@ -217,6 +291,9 @@ const styles = StyleSheet.create({
   },
   btn_milk: {
     backgroundColor: "#ceeced",
+  },
+  btn_eye_drop: {
+    backgroundColor: "#c75bc2",
   },
   send_btn_container: {
     display: "flex",
