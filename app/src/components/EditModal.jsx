@@ -71,6 +71,14 @@ export default function EditModal() {
       });
   };
 
+  if (!editData) {
+    return (
+      <Modal>
+        <Text style={{ textAlign: "center" }}>⚠️ No data to edit.</Text>
+      </Modal>
+    );
+  }
+
   return (
     <Modal>
       <Text style={styles.edit_header}>Edit Task</Text>

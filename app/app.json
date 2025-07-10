@@ -23,6 +23,10 @@
       "edgeToEdgeEnabled": true,
       "package": "com.vazoi.app"
     },
+    "updates": {
+      "enabled": true,
+      "url": "https://u.expo.dev/3e8e9517-2bb0-44bd-8e45-fd71dc3c3e8c"
+    },
     "web": {
       "favicon": "./assets/favicon.png"
     },
@@ -30,6 +34,9 @@
       "eas": {
         "projectId": "3e8e9517-2bb0-44bd-8e45-fd71dc3c3e8c"
       }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     }
   }
 }
