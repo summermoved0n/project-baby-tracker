@@ -33,6 +33,8 @@ export default function EditModal() {
   const editData = useSelector(selectEditData);
   const taskTime = useSelector(selectTaskTime);
 
+  console.log(editData);
+
   const [milkFormula, setMilkFormula] = useState(null);
   const [breastFeedingTime, setBreastFeedingTime] = useState(null);
   const [breastSide, setBreastSide] = useState(editData.breastSide || null);
@@ -70,14 +72,6 @@ export default function EditModal() {
         dispatch(setTaskMinutes(null));
       });
   };
-
-  if (!editData) {
-    return (
-      <Modal>
-        <Text style={{ textAlign: "center" }}>⚠️ No data to edit.</Text>
-      </Modal>
-    );
-  }
 
   return (
     <Modal>

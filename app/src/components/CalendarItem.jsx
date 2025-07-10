@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -43,25 +43,11 @@ export default function CalendarItem({ babyService }) {
   };
 
   const onPressEdit = (id) => {
-    if (!Array.isArray(dayTask[0]?.babyService)) {
-      console.warn("⛔️ babyService is not valid");
-      return;
-    }
-
     const currentTask = dayTask[0].babyService.find((item) => item._id === id);
 
-    if (!currentTask) {
-      console.warn("⛔️ Не знайдено таску з таким ID:", id);
-      return;
-    }
-
-    try {
-      dispatch(setEditData(currentTask));
-      dispatch(setModalType("edit"));
-      dispatch(openModal());
-    } catch {
-      Alert.alert("💥 Error in edit", err.message);
-    }
+    dispatch(setEditData(currentTask));
+    dispatch(setModalType("edit"));
+    dispatch(openModal());
   };
 
   return (
