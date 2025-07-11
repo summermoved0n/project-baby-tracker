@@ -18,6 +18,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from "react-native";
 import Loading from "../components/Loading";
 
@@ -105,11 +106,18 @@ export default function RegistrationScreen() {
         keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -180}
         style={styles.container}
       >
-        <ImageBackground
-          style={styles.background}
-          source={require("../../assets/images/photo-BG.jpg")}
-        >
-          <View style={styles.registration_container}>
+        <View style={styles.registration_container}>
+          <Image
+            source={require("../../assets/images/boy_bg.jpg")}
+            style={{
+              width: "100%",
+              height: 310,
+              marginBottom: 20,
+            }}
+            resizeMode="cover"
+          />
+
+          <View>
             <Text style={styles.registration_header}>Registration</Text>
             <View style={styles.registration_form}>
               <TextInput
@@ -178,7 +186,7 @@ export default function RegistrationScreen() {
               </Text>
             </TouchableOpacity>
           </View>
-        </ImageBackground>
+        </View>
 
         {isLoading && <Loading />}
       </KeyboardAvoidingView>
@@ -187,18 +195,11 @@ export default function RegistrationScreen() {
 }
 
 const styles = StyleSheet.create({
-  background: {
-    height: "100%",
-    width: "100%",
-    justifyContent: "flex-end",
-  },
   registration_container: {
     backgroundColor: "#FFFFFF",
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    width: "100%",
-    paddingTop: 92,
+    paddingTop: 40,
     paddingBottom: 78,
+    justifyContent: "flex-end",
   },
   registration_avatar: {
     position: "absolute",
@@ -238,14 +239,14 @@ const styles = StyleSheet.create({
     color: "#212121",
   },
   registration_inputFocused: {
-    borderColor: "#FF6C00",
+    borderColor: "#48a5db",
     backgroundColor: "transparent",
   },
   registration_button: {
     marginTop: 43,
     marginBottom: 16,
     marginHorizontal: 16,
-    backgroundColor: "#FF6C00",
+    backgroundColor: "#48a5db",
     borderRadius: 100,
     height: 51,
     display: "flex",

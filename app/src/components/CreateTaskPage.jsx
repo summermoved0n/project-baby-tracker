@@ -29,13 +29,11 @@ export default function CreateTaskPage() {
   const [isPee, setIsPee] = useState(false);
   const [breastSide, setBreastSide] = useState(null);
   const [vitaminD, setVitaminD] = useState(false);
+  const [eyeDrop, setEyeDrop] = useState(false);
 
   const [startFeed, setStartFeed] = useState("00:00");
   const [endFeed, setEndFeed] = useState("00:00");
 
-  const [activePoop, setActivePoop] = useState(false);
-  const [activePee, setActivePee] = useState(false);
-  const [activeDropD, setActiveDropD] = useState(false);
   const [activeLeftBreast, setActiveLeftBreast] = useState(false);
   const [activeRightBreast, setActiveRightBreast] = useState(false);
 
@@ -68,6 +66,7 @@ export default function CreateTaskPage() {
     if (isPee) formData.isPee = isPee;
     if (breastSide) formData.breastSide = breastSide;
     if (vitaminD) formData.vitaminD = vitaminD;
+    if (eyeDrop) formData.eyeDrop = eyeDrop;
 
     if (hasTwoMoreKeys(formData)) {
       try {
@@ -111,13 +110,10 @@ export default function CreateTaskPage() {
     setIsPoop(false);
     setIsPee(false);
     setVitaminD(false);
+    setEyeDrop(false);
 
     setStartFeed("00:00");
     setEndFeed("00:00");
-
-    setActivePoop(false);
-    setActivePee(false);
-    setActiveDropD(false);
     setActiveLeftBreast(false);
     setActiveRightBreast(false);
   };
@@ -238,19 +234,17 @@ export default function CreateTaskPage() {
         <View style={[styles.diaper_container, styles.border_conreiner]}>
           <TouchableOpacity
             onPress={() => {
-              setActivePoop(!activePoop);
               setIsPoop(!isPoop);
             }}
-            style={[styles.button_small, activePoop && styles.active_button]}
+            style={[styles.button_small, isPoop && styles.active_button]}
           >
             <Text style={{ fontSize: 20 }}>Poop</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              setActivePee(!activePee);
               setIsPee(!isPee);
             }}
-            style={[styles.button_small, activePee && styles.active_button]}
+            style={[styles.button_small, isPee && styles.active_button]}
           >
             <Text style={{ fontSize: 20 }}>Pee</Text>
           </TouchableOpacity>
@@ -262,19 +256,17 @@ export default function CreateTaskPage() {
           <TouchableOpacity
             onPress={() => {
               setVitaminD(!vitaminD);
-              setActiveDropD(!activeDropD);
             }}
-            style={[styles.button_small, activeDropD && styles.active_button]}
+            style={[styles.button_small, vitaminD && styles.active_button]}
           >
             <Text style={{ fontSize: 20 }}>Vitamin D</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={() => {
-              setVitaminD(!vitaminD);
-              setActiveDropD(!activeDropD);
+              setEyeDrop(!eyeDrop);
             }}
-            style={[styles.button_small, activeDropD && styles.active_button]}
+            style={[styles.button_small, eyeDrop && styles.active_button]}
           >
             <Text style={{ fontSize: 20 }}>Eye Drop</Text>
           </TouchableOpacity>

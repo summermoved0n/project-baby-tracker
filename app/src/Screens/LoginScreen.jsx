@@ -10,7 +10,6 @@ import { selectAuthLoading } from "../redux/auth/authSelectors";
 import {
   StyleSheet,
   Text,
-  ImageBackground,
   View,
   TextInput,
   TouchableOpacity,
@@ -18,6 +17,7 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from "react-native";
 
 export default function LoginScreen() {
@@ -51,7 +51,6 @@ export default function LoginScreen() {
         navigation.navigate("Tasks");
       })
       .catch((err) => {
-        console.log("Errrrrrrrror", err);
         Toast.show({
           type: "error", // 'success' | 'error' | 'info'
           text1: err.message || err || "Error",
@@ -64,14 +63,21 @@ export default function LoginScreen() {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -240}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 0 : -230}
         style={styles.container}
       >
-        <ImageBackground
-          style={styles.background}
-          source={require("../../assets/images/photo-BG.jpg")}
-        >
-          <View style={styles.login_container}>
+        <View style={styles.login_container}>
+          <Image
+            source={require("../../assets/images/girl_bg.jpg")}
+            style={{
+              width: "100%",
+              height: 320,
+              marginBottom: 20,
+            }}
+            resizeMode="cover"
+          />
+
+          <View>
             <Text style={styles.login_title}>Log In</Text>
 
             <View style={styles.login_form}>
@@ -127,7 +133,7 @@ export default function LoginScreen() {
               </Text>
             </TouchableOpacity>
           </View>
-        </ImageBackground>
+        </View>
 
         {isLoading && <Loading />}
       </KeyboardAvoidingView>
@@ -136,17 +142,11 @@ export default function LoginScreen() {
 }
 
 const styles = StyleSheet.create({
-  background: {
-    height: "100%",
-    width: "100%",
-    justifyContent: "flex-end",
-  },
   login_container: {
-    backgroundColor: "#ffffff",
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
-    paddingTop: 32,
-    paddingBottom: 144,
+    backgroundColor: "#FFFFFF",
+    paddingTop: 40,
+    paddingBottom: 134,
+    justifyContent: "flex-end",
   },
   login_title: {
     fontWeight: "500",
@@ -173,14 +173,14 @@ const styles = StyleSheet.create({
     color: "#212121",
   },
   login_inputFocused: {
-    borderColor: "#FF6C00",
+    borderColor: "pink",
     backgroundColor: "transparent",
   },
   login_button: {
     marginTop: 43,
     marginBottom: 16,
     marginHorizontal: 16,
-    backgroundColor: "#FF6C00",
+    backgroundColor: "pink",
     borderRadius: 100,
     height: 51,
     display: "flex",
@@ -208,16 +208,5 @@ const styles = StyleSheet.create({
     fontWeight: "400",
     fontSize: 16,
     color: "#1b4371",
-  },
-  loading_conteiner: {
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    backgroundColor: "rgba(255,255,255,0.8)",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: "100%",
-    zIndex: 100,
   },
 });
