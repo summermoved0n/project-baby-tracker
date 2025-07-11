@@ -87,6 +87,12 @@ export default function CalendarPage() {
       </ScrollView>
 
       {isModal && modalType === "delete" && <DeleteModal />}
+      {/* {isModal && modalType === "edit" && (
+        <Modal>
+          <Text>Hello</Text>
+        </Modal>
+      )} */}
+
       {isModal && modalType === "edit" && <EditModal />}
     </View>
   );

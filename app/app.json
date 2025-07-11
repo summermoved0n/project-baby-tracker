@@ -25,7 +25,10 @@
     },
     "updates": {
       "enabled": true,
-      "url": "https://u.expo.dev/3e8e9517-2bb0-44bd-8e45-fd71dc3c3e8c"
+      "url": "https://u.expo.dev/3e8e9517-2bb0-44bd-8e45-fd71dc3c3e8c",
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0,
+      "channel": "default"
     },
     "web": {
       "favicon": "./assets/favicon.png"

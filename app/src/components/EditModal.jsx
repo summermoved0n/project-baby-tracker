@@ -15,7 +15,7 @@ import {
   selectTaskTime,
 } from "../redux/tasks/tasks.Selectors";
 import { updateOneTask } from "../redux/tasks/tasksOperation";
-import Selector from "./Selector";
+import TimeInput from "./TimeInput";
 import {
   closeModal,
   setTaskHours,
@@ -32,8 +32,6 @@ export default function EditModal() {
   const dayTasks = useSelector(selectDayTasks);
   const editData = useSelector(selectEditData);
   const taskTime = useSelector(selectTaskTime);
-
-  console.log(editData);
 
   const [milkFormula, setMilkFormula] = useState(null);
   const [breastFeedingTime, setBreastFeedingTime] = useState(null);
@@ -80,7 +78,7 @@ export default function EditModal() {
         <View style={styles.time_container}>
           <Text style={styles.input_text}>Time</Text>
 
-          <Selector />
+          <TimeInput />
         </View>
 
         <View style={styles.milk_container}>
@@ -94,7 +92,6 @@ export default function EditModal() {
             onChangeText={setBreastFeedingTime}
             maxLength={2}
           />
-          <Text>Hello</Text>
         </View>
 
         <View
