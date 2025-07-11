@@ -1,8 +1,9 @@
 import "react-native-gesture-handler";
 
 import { TouchableOpacity } from "react-native";
-
+import Toast from "react-native-toast-message";
 import Feather from "@expo/vector-icons/Feather";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -44,21 +45,32 @@ export default function AppNavigation() {
           name={"Tasks"}
           component={TasksScreen}
           options={({ navigation }) => ({
+            headerTitle: "Baby tracker",
             headerStyle: { borderBottomColor: "#bdbdbd", borderBottomWidth: 1 },
             headerShadowVisible: false,
             headerTitleAlign: "center",
             headerTintColor: "#212121",
             headerTitleStyle: {
               fontWeight: "500",
-              fontSize: 17,
+              fontSize: 20,
             },
-            headerLeft: () => null,
+            headerLeft: () => (
+              <TouchableOpacity style={{ marginLeft: 16 }} onPress={() => {}}>
+                <Ionicons name="settings-outline" size={26} color="#bdbdbd" />
+              </TouchableOpacity>
+            ),
             headerRight: () => (
               <TouchableOpacity
                 style={{ marginRight: 16 }}
                 onPress={() => {
-                  dispatch(logOut());
-                  navigation.navigate("Login");
+                  dispatch(logOut()).finally(() => {
+                    Toast.show({
+                      type: "success", // 'success' | 'error' | 'info'
+                      text1: "Log Out success",
+                      text2: "See you again next time!",
+                    });
+                    navigation.navigate("Login");
+                  });
                 }}
               >
                 <Feather name="log-out" size={24} color="#bdbdbd" />

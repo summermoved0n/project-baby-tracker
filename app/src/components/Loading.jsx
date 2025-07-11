@@ -15,7 +15,7 @@ export default function Loading() {
         zIndex: 100,
       }}
     >
-      <ActivityIndicator size="large" color="#FF6C00" />
+      <ActivityIndicator size="large" color="purple" />
     </View>
   );
 }

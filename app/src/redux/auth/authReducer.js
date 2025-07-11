@@ -56,7 +56,6 @@ const authSlice = createSlice({
           currentUser.rejected
         ),
         (state, { payload }) => {
-          console.log("rejected", payload);
           state.isLoading = false;
           state.error = payload;
         }
