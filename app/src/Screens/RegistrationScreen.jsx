@@ -18,8 +18,8 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
 } from "react-native";
+import Loading from "../components/Loading";
 
 export default function RegistrationScreen() {
   const isLoading = useSelector(selectAuthLoading);
@@ -180,23 +180,7 @@ export default function RegistrationScreen() {
           </View>
         </ImageBackground>
 
-        {isLoading && (
-          <View
-            style={{
-              justifyContent: "center",
-              alignItems: "center",
-              position: "absolute",
-              backgroundColor: "rgba(255,255,255,0.8)",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              zIndex: 100,
-            }}
-          >
-            <ActivityIndicator size="large" color="#FF6C00" />
-          </View>
-        )}
+        {isLoading && <Loading />}
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );

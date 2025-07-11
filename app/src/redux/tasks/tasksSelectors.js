@@ -22,3 +22,8 @@ export const selectEditData = (state) => {
   const { editData } = state.tasks;
   return editData;
 };
+
+export const selectTaskLoading = (state) => {
+  const { isLoading } = state.tasks;
+  return isLoading;
+};

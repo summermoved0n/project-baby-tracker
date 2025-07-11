@@ -1,5 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { getDayTasks } from "./tasksOperation";
+import { createSlice, isAnyOf } from "@reduxjs/toolkit";
+import {
+  getDayTasks,
+  createTask,
+  deleteOneTask,
+  updateOneTask,
+} from "./tasksOperation";
 
 const initialState = {
   dayTasks: [],
@@ -7,6 +12,8 @@ const initialState = {
   modalType: null,
   deleteData: null,
   editData: null,
+  isLoading: false,
+  error: null,
 };
 
 const tasksSlice = createSlice({
@@ -30,10 +37,44 @@ const tasksSlice = createSlice({
     },
   },
   extraReducers: (builder) =>
-    builder.addCase(getDayTasks.fulfilled, (state, { payload }) => {
-      // console.log("🎯 Отримано з бекенду:", JSON.stringify(payload, null, 2));
-      state.dayTasks = payload;
-    }),
+    builder
+      .addCase(getDayTasks.fulfilled, (state, { payload }) => {
+        // console.log("🎯 Отримано з бекенду:", JSON.stringify(payload, null, 2));
+        state.dayTasks = payload;
+        state.isLoading = false;
+      })
+      .addCase(createTask.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+      })
+      .addCase(deleteOneTask.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+      })
+      .addCase(updateOneTask.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+      })
+      .addMatcher(
+        isAnyOf(
+          getDayTasks.pending,
+          createTask.pending,
+          deleteOneTask.pending,
+          updateOneTask.pending
+        ),
+        (state) => {
+          state.isLoading = true;
+        }
+      )
+      .addMatcher(
+        isAnyOf(
+          getDayTasks.rejected,
+          createTask.rejected,
+          deleteOneTask.rejected,
+          updateOneTask.rejected
+        ),
+        (state, { payload }) => {
+          state.isLoading = false;
+          state.error = payload;
+        }
+      ),
 });
 
 export const {

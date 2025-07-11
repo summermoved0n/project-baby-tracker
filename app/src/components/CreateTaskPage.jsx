@@ -41,11 +41,21 @@ export default function CreateTaskPage() {
 
   const sendData = async () => {
     const date = new Date();
+    console.log(startFeed, endFeed);
     const countFeedTime = getMinutesDifference(startFeed, endFeed);
+    console.log(countFeedTime);
 
-    if (countFeedTime === 0) {
+    if (countFeedTime < 0) {
       setStartFeed("00:00");
       setEndFeed("00:00");
+
+      Toast.show({
+        type: "error", // 'success' | 'error' | 'info'
+        text1: "Breast Feeding wrong time",
+        text2: "If you press 'Start' you need to press 'End'",
+      });
+
+      return;
     }
 
     const formData = {
@@ -62,21 +72,32 @@ export default function CreateTaskPage() {
     if (hasTwoMoreKeys(formData)) {
       try {
         console.log(formData);
-        dispatch(createTask(formData));
-        resetForm();
-        Toast.show({
-          type: "success", // 'success' | 'error' | 'info'
-          text1: "Created a task",
-          text2: "You can see a new task in the calendar.",
-        });
-
-        navigation.navigate("Calendar");
+        dispatch(createTask(formData))
+          .unwrap()
+          .then(() => {
+            Toast.show({
+              type: "success", // 'success' | 'error' | 'info'
+              text1: "Created a task",
+              text2: "You can see a new task in the calendar.",
+            });
+            resetForm();
+            navigation.navigate("Calendar");
+          })
+          .catch((err) =>
+            Toast.show({
+              type: "error", // 'success' | 'error' | 'info'
+              text1: err || err.message,
+              text2: "Something went wrong",
+            })
+          );
       } catch (error) {
         console.log(error);
       }
       return;
     }
 
+    setStartFeed("00:00");
+    setEndFeed("00:00");
     Toast.show({
       type: "error", // 'success' | 'error' | 'info'
       text1: "Bad request",

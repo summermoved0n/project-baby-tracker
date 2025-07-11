@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { useDispatch, useSelector } from "react-redux";
 import Toast from "react-native-toast-message";
+import Loading from "../components/Loading";
 
 import { logIn } from "../redux/auth/authOperation";
 import { selectAuthLoading } from "../redux/auth/authSelectors";
@@ -17,7 +18,6 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
 } from "react-native";
 
 export default function LoginScreen() {
@@ -129,11 +129,7 @@ export default function LoginScreen() {
           </View>
         </ImageBackground>
 
-        {isLoading && (
-          <View style={styles.loading_conteiner}>
-            <ActivityIndicator size="large" color="#FF6C00" />
-          </View>
-        )}
+        {isLoading && <Loading />}
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );

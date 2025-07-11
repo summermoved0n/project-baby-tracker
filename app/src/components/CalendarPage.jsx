@@ -2,37 +2,34 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Calendar } from "react-native-calendars";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import Toast from "react-native-toast-message";
 import { getDayTasks } from "../redux/tasks/tasksOperation";
-import {
-  selectDayTasks,
-  selectModalType,
-  selectOpenModal,
-} from "../redux/tasks/tasksSelectors";
+import { selectDayTasks } from "../redux/tasks/tasksSelectors";
 import CalendarItem from "./CalendarItem";
-import DeleteModal from "./DeleteModal";
-import EditModal from "./EditModal";
-import { selectAuthToken } from "../redux/auth/authSelectors";
 
 const today = new Date();
 
 export default function CalendarPage() {
   const dispatch = useDispatch();
   const dayTasks = useSelector(selectDayTasks);
-  const isModal = useSelector(selectOpenModal);
-  const modalType = useSelector(selectModalType);
-  const token = useSelector(selectAuthToken);
 
   const [selectedDate, setSelectedDate] = useState(
     today.toLocaleDateString("sv-SE")
   );
 
   useEffect(() => {
-    if (!token) return;
     console.log(selectedDate);
     dispatch(getDayTasks(selectedDate))
-      .then((res) => console.log(res))
+      .unwrap()
+      .then(() =>
+        Toast.show({
+          type: "success", // 'success' | 'error' | 'info'
+          text1: "",
+          text2: "Something went wrong",
+        })
+      )
       .catch((err) => console.log(err));
-  }, [selectedDate, dispatch, token]);
+  }, [selectedDate, dispatch]);
 
   return (
     <View style={styles.calendar_conteiner}>
@@ -84,9 +81,6 @@ export default function CalendarPage() {
           </View>
         ))}
       </ScrollView>
-
-      {isModal && modalType === "delete" && <DeleteModal />}
-      {isModal && modalType === "edit" && <EditModal />}
     </View>
   );
 }

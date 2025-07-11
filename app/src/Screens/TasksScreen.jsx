@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { View, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
 
@@ -13,28 +13,53 @@ import FontAwesome from "@expo/vector-icons/FontAwesome";
 import CreateTaskPage from "../components/CreateTaskPage";
 import UserPage from "../components/UserPage";
 import CalendarPage from "../components/CalendarPage";
+import Loading from "../components/Loading";
+import DeleteModal from "../components/DeleteModal";
+import EditModal from "../components/EditModal";
+
 import { currentUser } from "../redux/auth/authOperation";
+import {
+  selectModalType,
+  selectOpenModal,
+  selectTaskLoading,
+} from "../redux/tasks/tasksSelectors";
 
 function CreateTask() {
+  const isLoading = useSelector(selectTaskLoading);
+
   return (
     <View style={styles.container}>
       <CreateTaskPage />
+
+      {isLoading && <Loading />}
     </View>
   );
 }
 
 function User() {
+  const isLoading = useSelector(selectTaskLoading);
+
   return (
     <View style={styles.container}>
       <UserPage />
+
+      {isLoading && <Loading />}
     </View>
   );
 }
 
 function Calendar() {
+  const isLoading = useSelector(selectTaskLoading);
+  const isModal = useSelector(selectOpenModal);
+  const modalType = useSelector(selectModalType);
+
   return (
     <View style={styles.container}>
       <CalendarPage />
+
+      {isLoading && <Loading />}
+      {isModal && modalType === "delete" && <DeleteModal />}
+      {isModal && modalType === "edit" && <EditModal />}
     </View>
   );
 }
