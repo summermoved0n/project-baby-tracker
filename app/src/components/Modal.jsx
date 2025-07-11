@@ -2,12 +2,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Animated } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  closeModal,
-  setModalType,
-  setTaskHours,
-  setTaskMinutes,
-} from "../redux/tasks/tasksReducer";
+import { closeModal, setModalType } from "../redux/tasks/tasksReducer";
 import { useEffect, useRef } from "react";
 import { selectModalType } from "../redux/tasks/tasksSelectors";
 
@@ -25,8 +20,6 @@ export default function Modal({ children }) {
   }, []);
 
   const noModal = () => {
-    dispatch(setTaskHours(null));
-    dispatch(setTaskMinutes(null));
     dispatch(setModalType(null));
     dispatch(closeModal());
   };

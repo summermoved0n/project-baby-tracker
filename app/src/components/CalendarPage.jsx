@@ -9,9 +9,9 @@ import {
   selectOpenModal,
 } from "../redux/tasks/tasksSelectors";
 import CalendarItem from "./CalendarItem";
-import Modal from "./Modal";
 import DeleteModal from "./DeleteModal";
 import EditModal from "./EditModal";
+import { selectAuthToken } from "../redux/auth/authSelectors";
 
 const today = new Date();
 
@@ -20,26 +20,25 @@ export default function CalendarPage() {
   const dayTasks = useSelector(selectDayTasks);
   const isModal = useSelector(selectOpenModal);
   const modalType = useSelector(selectModalType);
+  const token = useSelector(selectAuthToken);
 
   const [selectedDate, setSelectedDate] = useState(
     today.toLocaleDateString("sv-SE")
   );
 
   useEffect(() => {
+    if (!token) return;
     console.log(selectedDate);
-    dispatch(getDayTasks(selectedDate));
-
-    return () => {
-      console.log("unmount component");
-    };
-  }, [selectedDate, dispatch]);
+    dispatch(getDayTasks(selectedDate))
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  }, [selectedDate, dispatch, token]);
 
   return (
     <View style={styles.calendar_conteiner}>
       <View style={styles.calendar}>
         <Calendar
           onDayPress={(day) => {
-            // console.log("selected day", day);
             setSelectedDate(day.dateString);
           }}
           markedDates={{
@@ -87,12 +86,6 @@ export default function CalendarPage() {
       </ScrollView>
 
       {isModal && modalType === "delete" && <DeleteModal />}
-      {/* {isModal && modalType === "edit" && (
-        <Modal>
-          <Text>Hello</Text>
-        </Modal>
-      )} */}
-
       {isModal && modalType === "edit" && <EditModal />}
     </View>
   );

@@ -12,6 +12,7 @@ import {
   setEditData,
   setModalType,
 } from "../redux/tasks/tasksReducer";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 export default function CalendarItem({ babyService }) {
   const {
@@ -23,6 +24,7 @@ export default function CalendarItem({ babyService }) {
     isPee,
     vitaminD,
     breastSide,
+    eyeDrop,
   } = babyService;
 
   const dispatch = useDispatch();
@@ -108,6 +110,11 @@ export default function CalendarItem({ babyService }) {
             VitaminD
           </Text>
         )}
+        {eyeDrop && (
+          <Text style={[styles.item, styles.eye_drop]}>
+            <FontAwesome name="eye" size={16} color="black" /> EyeDrop
+          </Text>
+        )}
       </View>
     </View>
   );
@@ -140,7 +147,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 5,
     flexWrap: "wrap",
-    // justifyContent: "center",
     alignItems: "center",
   },
   time_text: { fontSize: 16, fontWeight: "500" },
@@ -169,4 +175,5 @@ const styles = StyleSheet.create({
   milk: {
     backgroundColor: "#ceeced",
   },
+  eye_drop: { backgroundColor: "#c75bc2" },
 });

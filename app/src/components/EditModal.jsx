@@ -52,13 +52,13 @@ export default function EditModal() {
     if (isPee !== null || isPee !== undefined) data.updateData.isPee = isPee;
     if (vitaminD !== null || vitaminD !== undefined)
       data.updateData.vitaminD = vitaminD;
+    if (eyeDrop !== null || eyeDrop !== undefined)
+      data.updateData.eyeDrop = eyeDrop;
 
     dispatch(updateOneTask(data))
       .then()
       .finally(() => {
         dispatch(closeModal());
-        dispatch(setTaskHours(null));
-        dispatch(setTaskMinutes(null));
       });
   };
 

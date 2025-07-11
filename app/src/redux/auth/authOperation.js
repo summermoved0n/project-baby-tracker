@@ -3,7 +3,6 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 axios.defaults.baseURL = "https://project-backend-d58n.onrender.com/api";
-// axios.defaults.baseURL = "http://localhost:3031/api";
 
 const token = {
   set(token) {

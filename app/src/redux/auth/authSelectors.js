@@ -17,3 +17,8 @@ export const selectAuthError = (state) => {
   const { error } = state.auth;
   return error;
 };
+
+export const selectAuthToken = (state) => {
+  const { token } = state.auth;
+  return token;
+};
