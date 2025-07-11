@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createTask, getDayTasks, deleteOneTask } from "./tasksOperation";
+import { getDayTasks } from "./tasksOperation";
 
 const initialState = {
   dayTasks: [],
@@ -7,10 +7,6 @@ const initialState = {
   modalType: null,
   deleteData: null,
   editData: null,
-  task: {
-    hours: null,
-    minutes: null,
-  },
 };
 
 const tasksSlice = createSlice({
@@ -32,12 +28,6 @@ const tasksSlice = createSlice({
     setEditData(state, { payload }) {
       state.editData = payload;
     },
-    setTaskHours(state, { payload }) {
-      state.task.hours = payload;
-    },
-    setTaskMinutes(state, { payload }) {
-      state.task.minutes = payload;
-    },
   },
   extraReducers: (builder) =>
     builder.addCase(getDayTasks.fulfilled, (state, { payload }) => {
@@ -52,7 +42,5 @@ export const {
   setModalType,
   setDeleteData,
   setEditData,
-  setTaskHours,
-  setTaskMinutes,
 } = tasksSlice.actions;
 export const tasksReducer = tasksSlice.reducer;

@@ -9,18 +9,9 @@ import {
 import Modal from "./Modal";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  selectDayTasks,
-  selectEditData,
-  selectTaskTime,
-} from "../redux/tasks/tasks.Selectors";
+import { selectDayTasks, selectEditData } from "../redux/tasks/tasksSelectors";
 import { updateOneTask } from "../redux/tasks/tasksOperation";
-import TimeInput from "./TimeInput";
-import {
-  closeModal,
-  setTaskHours,
-  setTaskMinutes,
-} from "../redux/tasks/tasksReducer";
+import { closeModal } from "../redux/tasks/tasksReducer";
 
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -31,7 +22,9 @@ export default function EditModal() {
   const dispatch = useDispatch();
   const dayTasks = useSelector(selectDayTasks);
   const editData = useSelector(selectEditData);
-  const taskTime = useSelector(selectTaskTime);
+
+  const [hour, setHour] = useState("");
+  const [minute, setMinute] = useState("");
 
   const [milkFormula, setMilkFormula] = useState(null);
   const [breastFeedingTime, setBreastFeedingTime] = useState(null);
@@ -42,8 +35,6 @@ export default function EditModal() {
   const [eyeDrop, setEyeDrop] = useState(editData.eyeDrop || false);
 
   const onSubmit = () => {
-    const { hours, minutes } = taskTime || {};
-
     const data = {
       date: dayTasks[0].date,
       dayId: dayTasks[0]._id,
@@ -51,7 +42,7 @@ export default function EditModal() {
       updateData: {},
     };
 
-    if (hours && minutes) data.updateData.time = `${hours}:${minutes}`;
+    if (hour && minute) data.updateData.time = `${hour}:${minute}`;
     if (milkFormula) data.updateData.milkFormula = Number(milkFormula);
     if (breastFeedingTime)
       data.updateData.breastFeedingTime = Number(breastFeedingTime);
@@ -78,7 +69,49 @@ export default function EditModal() {
         <View style={styles.time_container}>
           <Text style={styles.input_text}>Time</Text>
 
-          <TimeInput />
+          <View style={styles.row}>
+            <TextInput
+              style={styles.time_input}
+              value={hour}
+              onChangeText={(text) => {
+                const num = parseInt(text, 10);
+                if (!isNaN(num) && num <= 23) {
+                  setHour(text);
+                } else if (text === "") {
+                  setHour("");
+                }
+              }}
+              onBlur={() => {
+                if (hour.length === 1) {
+                  setHour(hour.padStart(2, "0"));
+                }
+              }}
+              placeholder="hh"
+              maxLength={2}
+              keyboardType="number-pad"
+            />
+            <Text style={styles.separator}>:</Text>
+            <TextInput
+              style={styles.time_input}
+              value={minute}
+              onChangeText={(text) => {
+                const num = parseInt(text, 10);
+                if (!isNaN(num) && num <= 59) {
+                  setMinute(text);
+                } else if (text === "") {
+                  setMinute("");
+                }
+              }}
+              onBlur={() => {
+                if (minute.length === 1) {
+                  setMinute(minute.padStart(2, "0"));
+                }
+              }}
+              placeholder="mm"
+              maxLength={2}
+              keyboardType="number-pad"
+            />
+          </View>
         </View>
 
         <View style={styles.milk_container}>
@@ -309,5 +342,24 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 20,
+  },
+  time_input: {
+    borderWidth: 1,
+    borderRadius: 10,
+    width: 50,
+    height: 40,
+    textAlign: "center",
+    fontSize: 18,
+    backgroundColor: "#fff",
+  },
+  separator: {
+    fontSize: 24,
+    marginHorizontal: 8,
   },
 });

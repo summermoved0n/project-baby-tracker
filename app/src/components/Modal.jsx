@@ -9,7 +9,7 @@ import {
   setTaskMinutes,
 } from "../redux/tasks/tasksReducer";
 import { useEffect, useRef } from "react";
-import { selectModalType } from "../redux/tasks/tasks.Selectors";
+import { selectModalType } from "../redux/tasks/tasksSelectors";
 
 export default function Modal({ children }) {
   const dispatch = useDispatch();

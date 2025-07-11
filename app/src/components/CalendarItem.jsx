@@ -4,7 +4,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Entypo from "@expo/vector-icons/Entypo";
-import { selectDayTasks } from "../redux/tasks/tasks.Selectors";
+import { selectDayTasks } from "../redux/tasks/tasksSelectors";
 import { useDispatch, useSelector } from "react-redux";
 import {
   openModal,

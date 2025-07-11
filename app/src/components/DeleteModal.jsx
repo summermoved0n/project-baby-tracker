@@ -2,7 +2,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 import Modal from "./Modal";
 import { useDispatch, useSelector } from "react-redux";
-import { selectDeleteData } from "../redux/tasks/tasks.Selectors";
+import { selectDeleteData } from "../redux/tasks/tasksSelectors";
 import { deleteOneTask } from "../redux/tasks/tasksOperation";
 import {
   closeModal,

@@ -7,7 +7,7 @@ import {
   selectDayTasks,
   selectModalType,
   selectOpenModal,
-} from "../redux/tasks/tasks.Selectors";
+} from "../redux/tasks/tasksSelectors";
 import CalendarItem from "./CalendarItem";
 import Modal from "./Modal";
 import DeleteModal from "./DeleteModal";

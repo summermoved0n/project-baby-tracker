@@ -22,8 +22,3 @@ export const selectEditData = (state) => {
   const { editData } = state.tasks;
   return editData;
 };
-
-export const selectTaskTime = (state) => {
-  const { task } = state.tasks;
-  return task;
-};
